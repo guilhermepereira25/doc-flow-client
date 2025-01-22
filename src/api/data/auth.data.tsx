@@ -1,19 +1,21 @@
 import AuthService from '../services/auth.service';
 
-export const singin = async (email: string, password: string) => {
+export const getAccessToken = async (username: string, password: string) => {
   try {
     const authServiceInstance = new AuthService();
-    return await authServiceInstance.singin(email, password);
+    const data = await authServiceInstance.singin(username, password);
+    return data.access_token;
   } catch (error) {
-    return error;
+    console.error(error);
   }
 };
 
 export const singup = async (username: string, password: string) => {
   try {
     const authServiceInstance = new AuthService();
-    return await authServiceInstance.singup(username, password);
+    const data = await authServiceInstance.singup(username, password);
+    return data;
   } catch (err) {
-    return err;
+    console.error(err);
   }
 };
