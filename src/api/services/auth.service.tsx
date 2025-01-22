@@ -6,12 +6,12 @@ export default class AuthService extends AbstractService {
     super('/auth');
   }
 
-  async singin(email: string, password: string) {
-    return Service.post(this.basePath + '/singin', { email, password });
+  async singin(username: string, password: string) {
+    return Service.post(this.basePath + '/signin', { username, password });
   }
 
-  async singup(email: string, password: string) {
-    return Service.post(this.basePath + '/singup', { email, password });
+  async singup(username: string, password: string) {
+    return Service.post(this.basePath + '/singup', { username, password });
   }
 
   async logout() {
