@@ -3,7 +3,7 @@ import logo from '@/assets/cefet-logo.png';
 
 export default function AuthLayout() {
   return (
-    <div className="h-screen grid grid-cols-2">
+    <div className="h-screen grid grid-cols-1 md:grid-cols-2">
       <div className="flex flex-col min-h-screen items-center justify-center bg-white p-4">
         <div className="logo">
           <img
@@ -14,7 +14,7 @@ export default function AuthLayout() {
         </div>
         <Outlet />
       </div>
-      <div className="bg-sky-900"></div>
+      <div className="hidden md:block bg-sky-900"></div>
     </div>
   );
 }
