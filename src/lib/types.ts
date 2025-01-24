@@ -1,5 +1,34 @@
 import { z } from "zod";
 
+export interface ApiResponse<T> {
+    status: number;
+    success: boolean;
+    error: string | null;
+    data: T;
+};
+
+export const userSchema = z.object({
+    id: z.string(),
+    email: z.string().email().regex(/@cefet-rj.br$/),
+    password: z.string().min(8),
+    enrollment: z.string().regex(/\d{4}\d{3}\w{3}/),
+    profile_id: z.string(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+});
+
+export type User = z.infer<typeof userSchema>;
+
+export const eventsSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+    status: z.string(),
+    start_at: z.string(),
+    end_at: z.string(),
+});
+
+export type Event = z.infer<typeof eventsSchema>;
+
 export const roleSchema = z.object({
     id: z.string(),
     name: z.string(),
