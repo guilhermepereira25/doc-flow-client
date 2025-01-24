@@ -1,5 +1,3 @@
-import { Link } from 'react-router';
-
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -12,13 +10,11 @@ export default function NavBar() {
   return (
     <NavigationMenu>
       <NavigationMenuList>
-        <Link to={'/home'}>
-          <NavigationMenuLink href="/home">
-            <NavigationMenuItem className={navigationMenuTriggerStyle()}>
-              Home
-            </NavigationMenuItem>
-          </NavigationMenuLink>
-        </Link>
+        <NavigationMenuLink href="/home">
+          <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+            Home
+          </NavigationMenuItem>
+        </NavigationMenuLink>
       </NavigationMenuList>
     </NavigationMenu>
   );
