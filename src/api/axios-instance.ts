@@ -7,3 +7,18 @@ export const axiosInstance = axios.create({
         'Content-Type': 'application/json',
     },
 });
+
+export const privateAxiosInstance = axiosInstance;
+
+privateAxiosInstance.interceptors.request.use(
+    (config) => {
+        const accessToken = localStorage.getItem('accessToken');
+        if (accessToken) {
+            config.headers.Authorization = `Bearer: ${accessToken}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+)
