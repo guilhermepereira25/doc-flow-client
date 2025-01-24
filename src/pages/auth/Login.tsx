@@ -1,5 +1,4 @@
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getAccessToken } from '@/api/data/auth.data';
 import { useNavigate } from 'react-router';
@@ -9,22 +8,7 @@ import { useEffect, useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
-const formSchema = z.object({
-  email: z
-    .string()
-    .email({
-      message: 'Insira um email válido.',
-    })
-    .regex(/@cefet-rj.br$/, {
-      message: 'Insira um email institucional.',
-    }),
-  password: z.string().min(2, {
-    message: 'A senha deve ter no mínimo 8 caracteres.',
-  }),
-});
-
-export type FormSchema = z.infer<typeof formSchema>;
+import { authFormSchema, type AuthFormSchema } from '@/lib/types';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -32,14 +16,14 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const [text, setText] = useState<string>('');
 
-  const form = useForm<FormSchema>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<AuthFormSchema>({
+    resolver: zodResolver(authFormSchema),
     defaultValues: {
       email: '',
     },
   });
 
-  const handleSubmit = async (data: FormSchema) => {
+  const handleSubmit = async (data: AuthFormSchema) => {
     const accessToken = await getAccessToken(data.email, data.password);
     if (!accessToken) {
       setError('Não foi possível fazer login. Tente novamente.');
