@@ -29,6 +29,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const decodeAndReturnPayload = (token: string): UserPayload => {
     const payload = token.split('.')[1];
+    //see: https://stackoverflow.com/questions/68849233/convert-a-string-to-base64-in-javascript-btoa-and-atob-are-deprecated
     const decodedPayload = atob(payload);
     const jsonParsed = JSON.parse(decodedPayload);
     return userPayloadSchema.parse(jsonParsed);
@@ -55,13 +56,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       navigate(navigateFromTo, { replace: true });
     }
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated && !isLoading) {
       if (location.pathname === '/login' || location.pathname === '/signup') {
         return;
       }
       navigate('/login', { replace: true });
     }
-  }, [isAuthenticated, location, navigate]);
+  }, [isAuthenticated, location, navigate, isLoading]);
 
   useEffect(() => {
     if (!token) {
