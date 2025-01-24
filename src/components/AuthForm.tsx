@@ -1,16 +1,10 @@
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from './ui/input';
+import { Form, FormField } from '@/components/ui/form';
 import { Button } from './ui/button';
 import { AuthFormSchema } from '@/lib/types';
 import type { useForm } from 'react-hook-form';
-import { cn } from '@/lib/utils';
+import FormItemField from './FormItemField';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 
 interface AuthFormProps {
   form: ReturnType<typeof useForm<AuthFormSchema>>;
@@ -18,6 +12,17 @@ interface AuthFormProps {
 }
 
 export default function AuthForm({ form, onSubmit }: AuthFormProps) {
+  const [isRegister, setIsRegister] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === '/signup') {
+      setIsRegister(true);
+      return;
+    }
+    setIsRegister(false);
+  }, [location]);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -25,51 +30,33 @@ export default function AuthForm({ form, onSubmit }: AuthFormProps) {
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  className={cn(
-                    'rounded-2xl bg-white bg-opacity-60',
-                    form.formState.errors.email && 'border-destructive'
-                  )}
-                  type="email"
-                  placeholder="email"
-                  {...field}
-                  required
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <FormItemField
+              field={field}
+              label="Email"
+              error={form.formState.errors.email?.message}
+              type="email"
+              placeholder="email"
+            />
           )}
         />
         <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input
-                  className={cn(
-                    'rounded-2xl bg-white bg-opacity-60',
-                    form.formState.errors.password && 'border-destructive'
-                  )}
-                  type="password"
-                  placeholder="password"
-                  required
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <FormItemField
+              field={field}
+              label="Senha"
+              error={form.formState.errors.password?.message}
+              type="password"
+              placeholder="senha"
+            />
           )}
         />
         <Button
           className="w-full bg-sky-900 text-white hover:bg-sky-700"
           type="submit"
         >
-          Entrar
+          {isRegister ? 'Cadastrar' : 'Entrar'}
         </Button>
       </form>
     </Form>
