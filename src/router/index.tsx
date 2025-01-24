@@ -4,7 +4,8 @@ import Home from '@/pages/Home';
 import PrivateRoute from '@/components/PrivateRoute';
 import AuthLayout from '@/layouts/AuthLayout';
 import Login from '@/pages/auth/Login';
-import { AuthProvider } from '@/context/AuthContext';
+import { AuthProvider } from '@/context/AuthProvider';
+import { RegistrationForm } from '@/pages/auth/Signup';
 
 export default function Router() {
   return (
@@ -12,19 +13,15 @@ export default function Router() {
       <Routes>
         {/* Routes go here */}
         <Route path="/" element={<DefaultLayout />}>
-          <Route
-            index
-            element={
-              <PrivateRoute>
-                <Home />
-              </PrivateRoute>
-            }
-          />
+          <Route element={<PrivateRoute />}>
+            <Route path="/" element={<Home />} />
+          </Route>
         </Route>
+
         <Route element={<AuthLayout />}>
           {/* Nested routes go here */}
           <Route path="/login" element={<Login />} />
-          {/* <Route path='register' element={<Register/>} /> */}
+          <Route path="/signup" element={<RegistrationForm />} />
         </Route>
       </Routes>
     </AuthProvider>
