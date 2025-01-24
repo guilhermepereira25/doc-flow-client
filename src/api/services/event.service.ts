@@ -1,7 +1,8 @@
 import AbstractService from './abstract.service';
+
 export default class AuthService extends AbstractService {
   constructor() {
-    super('/auth');
+    super('/auth', true);
   }
 
   async singin(email: string, password: string) {
