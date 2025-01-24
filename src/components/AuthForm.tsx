@@ -8,13 +8,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
-import { FormSchema } from '@/pages/auth/Login';
+import { AuthFormSchema } from '@/lib/types';
 import type { useForm } from 'react-hook-form';
 import { cn } from '@/lib/utils';
 
 interface AuthFormProps {
-  form: ReturnType<typeof useForm<FormSchema>>;
-  onSubmit: (data: FormSchema) => void;
+  form: ReturnType<typeof useForm<AuthFormSchema>>;
+  onSubmit: (data: AuthFormSchema) => void;
 }
 
 export default function AuthForm({ form, onSubmit }: AuthFormProps) {
