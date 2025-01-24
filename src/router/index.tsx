@@ -11,13 +11,7 @@ export default function Router() {
     <AuthProvider>
       <Routes>
         {/* Routes go here */}
-        <Route
-          element={
-            <PrivateRoute>
-              <DefaultLayout />
-            </PrivateRoute>
-          }
-        >
+        <Route path="/" element={<DefaultLayout />}>
           <Route
             index
             element={
