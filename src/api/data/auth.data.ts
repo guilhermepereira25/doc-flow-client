@@ -14,7 +14,7 @@ export const singup = async (email: string, password: string) => {
   try {
     const authServiceInstance = new AuthService();
     const data = await authServiceInstance.singup(email, password);
-    return data;
+    return data.access_token;
   } catch (err) {
     console.error(err);
   }
