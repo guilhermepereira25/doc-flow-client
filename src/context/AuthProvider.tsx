@@ -1,7 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { useState, ReactNode, useEffect } from 'react';
 import { createContext } from 'react';
-import type { AuthContextType } from '@/lib/types';
+import {
+  UserPayload,
+  userPayloadSchema,
+  type AuthContextType,
+} from '@/lib/types';
 import { useLocation, useNavigate } from 'react-router';
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -14,12 +18,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [token, setToken] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<UserPayload | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
 
   const logout = () => {
     localStorage.clear();
     setIsAuthenticated(false);
+  };
+
+  const decodeAndReturnPayload = (token: string): UserPayload => {
+    const payload = token.split('.')[1];
+    const decodedPayload = atob(payload);
+    const jsonParsed = JSON.parse(decodedPayload);
+    return userPayloadSchema.parse(jsonParsed);
   };
 
   useEffect(() => {
@@ -51,9 +63,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [isAuthenticated, location, navigate]);
 
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+    const user = decodeAndReturnPayload(token);
+    if (!user) {
+      return;
+    }
+    setUser(user);
+  }, [token]);
+
   return (
     <AuthContext.Provider
-      value={{ token, setToken, logout, isAuthenticated, setIsAuthenticated }}
+      value={{
+        token,
+        setToken,
+        user,
+        logout,
+        isAuthenticated,
+        setIsAuthenticated,
+      }}
     >
       {children}
     </AuthContext.Provider>
