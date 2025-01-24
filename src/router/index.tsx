@@ -5,7 +5,7 @@ import PrivateRoute from '@/components/PrivateRoute';
 import AuthLayout from '@/layouts/AuthLayout';
 import Login from '@/pages/auth/Login';
 import { AuthProvider } from '@/context/AuthProvider';
-import { RegistrationForm } from '@/pages/auth/Signup';
+import Signup from '@/pages/auth/Signup';
 
 export default function Router() {
   return (
@@ -21,7 +21,7 @@ export default function Router() {
         <Route element={<AuthLayout />}>
           {/* Nested routes go here */}
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<RegistrationForm />} />
+          <Route path="/signup" element={<Signup />} />
         </Route>
       </Routes>
     </AuthProvider>
