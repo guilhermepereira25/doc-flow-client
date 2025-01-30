@@ -21,7 +21,7 @@ export default function Signup() {
   });
 
   const handleSubmit = async (data: AuthFormSchema) => {
-    const accessToken = await singup(data.email, data.password);
+    const accessToken = await singup({ ...data });
     if (!accessToken) {
       setError('Não foi possível fazer login. Tente novamente.');
       return;
