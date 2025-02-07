@@ -678,6 +678,12 @@ export interface components {
              * @example 2021-01-01
              */
             updated_at: string;
+
+            /**
+             * @description User ID that created the event
+             * @example 550e8400-e29b-41d4-a716-446655440000
+             */
+            created_by_user_id: string;
         };
         GetAllEventsResponseDto: {
             /** @description HTTP status code */
@@ -715,7 +721,11 @@ export interface components {
              *       "isStarted": true,
              *       "isEnded": false
              *     } */
-            data: Record<string, never>;
+            data: {
+                event: components["schemas"]["Event"];
+                isStarted: boolean;
+                isEnded: boolean;
+            };
         };
         UpdateEventDto: Record<string, never>;
         EndEventResponseDto: {

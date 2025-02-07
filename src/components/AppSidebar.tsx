@@ -3,7 +3,6 @@
 import * as React from 'react';
 
 import { NavUser } from './NavUser';
-// import { TeamSwitcher } from "./team-switcher" // Removed import
 import {
   Sidebar,
   SidebarContent,
@@ -15,6 +14,7 @@ import {
 import NavMenuItem from './NavMenuItem';
 import { useLocation, useNavigate } from 'react-router';
 import useAuth from '@/hooks/useAuth';
+import { menuRoutes } from '@/lib/utils';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const navigate = useNavigate();
@@ -22,16 +22,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [activeNavItem, setActiveNavItem] = React.useState<string>('');
   const { user } = useAuth();
 
+  const menuItems = React.useMemo(() => {
+    return menuRoutes;
+  }, []);
+
   React.useEffect(() => {
-    if (location.pathname === '/events') {
-      setActiveNavItem('events');
-      return;
+    if (menuItems.includes(location.pathname)) {
+      setActiveNavItem(location.pathname);
     }
-    if (location.pathname === '/events/create') {
-      setActiveNavItem('/events/create');
-      return;
-    }
-  }, [location]);
+  }, [location, menuItems]);
 
   return (
     <Sidebar variant="inset" {...props}>
@@ -46,16 +45,33 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu className="space-y-2">
-            <NavMenuItem
-              text="Todos eventos"
-              onClick={() => navigate('/events')}
-              activeNavItem={activeNavItem === 'events'}
-            />
+          <SidebarMenu className="space-y-1">
             <NavMenuItem
               text="Criar Evento"
-              onClick={() => navigate('/events/create')}
-              activeNavItem={activeNavItem === '/events/create'}
+              onClick={() =>
+                navigate('/events', {
+                  state: { from: { pathname: '/events' } },
+                })
+              }
+              activeNavItem={activeNavItem === '/events'}
+            />
+            <NavMenuItem
+              text="Todos eventos"
+              onClick={() =>
+                navigate('/events/all', {
+                  state: { from: { pathname: '/events/all' } },
+                })
+              }
+              activeNavItem={activeNavItem === '/events/all'}
+            />
+            <NavMenuItem
+              text="Perfil"
+              onClick={() =>
+                navigate('/profile', {
+                  state: { from: { pathname: '/profile' } },
+                })
+              }
+              activeNavItem={activeNavItem === '/profile'}
             />
           </SidebarMenu>
         </SidebarGroup>
