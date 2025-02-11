@@ -29,7 +29,7 @@ export default function Login() {
     localStorage.setItem('accessToken', accessToken);
     setToken(accessToken);
     setIsAuthenticated(true);
-    navigate('/');
+    navigate('/events');
   };
 
   return (
