@@ -1,40 +1,41 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { singup } from '@/api/data/auth.data';
+import { signup } from '@/api/data/auth.data';
 import { useNavigate } from 'react-router';
 import useAuth from '@/hooks/useAuth';
-import AuthForm from '@/components/AuthForm';
 import { Button } from '@/components/ui/button';
-import { authFormSchema, type AuthFormSchema } from '@/lib/types';
+import { SignupFormSchema, singupFormSchema } from '@/lib/types';
 import useAuthError from '@/hooks/useAuthError';
+import SignupAuthForm from '@/components/SignupAuthForm';
 
 export default function Signup() {
   const navigate = useNavigate();
   const { setToken, setIsAuthenticated } = useAuth();
   const { setError } = useAuthError();
 
-  const form = useForm<AuthFormSchema>({
-    resolver: zodResolver(authFormSchema),
+  const form = useForm<SignupFormSchema>({
+    resolver: zodResolver(singupFormSchema),
     defaultValues: {
       email: '',
     },
   });
 
-  const handleSubmit = async (data: AuthFormSchema) => {
-    const accessToken = await singup({ ...data });
+  const handleSubmit = async (data: SignupFormSchema) => {
+    localStorage.removeItem('accessToken');
+    const accessToken = await signup({ ...data });
     if (!accessToken) {
-      setError('Não foi possível fazer login. Tente novamente.');
+      setError('Não foi possível realizar o cadastro. Tente novamente mais tarde.');
       return;
     }
     localStorage.setItem('accessToken', accessToken);
     setToken(accessToken);
     setIsAuthenticated(true);
-    navigate('/');
+    navigate('/events');
   };
 
   return (
     <>
-      <AuthForm onSubmit={handleSubmit} form={form} />
+      <SignupAuthForm onSubmit={handleSubmit} form={form} />
 
       <p className="text-sky-900">Já tem uma conta?</p>
       <Button

@@ -6,6 +6,7 @@ import { NavUser } from './NavUser';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
@@ -15,12 +16,13 @@ import NavMenuItem from './NavMenuItem';
 import { useLocation, useNavigate } from 'react-router';
 import useAuth from '@/hooks/useAuth';
 import { menuRoutes } from '@/lib/utils';
+import { Button } from './ui/button';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeNavItem, setActiveNavItem] = React.useState<string>('');
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   const menuItems = React.useMemo(() => {
     return menuRoutes;
@@ -33,13 +35,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }, [location, menuItems]);
 
   return (
-    <Sidebar variant="inset" {...props}>
+    <Sidebar variant="inset" {...props} collapsible="offcanvas">
       <SidebarHeader className="flex items-center justify-between p-4">
         <NavUser
           user={{
             email: user?.email || 'Email não encontrado',
-            name: 'Guilherme Pereira',
-            avatar: '/avatars/guilherme.jpg',
+            name: user?.fullName || 'Nome não encontrado',
+            avatar: `/avatars/${user?.fullName.charAt(0).toLowerCase()}.png`,
           }}
         />
       </SidebarHeader>
@@ -76,6 +78,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter>
+        <Button className='rounded-2xl bg-sky-900 text-white' onClick={() => logout()}>
+          Sair
+        </Button>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

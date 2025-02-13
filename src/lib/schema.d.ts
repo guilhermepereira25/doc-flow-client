@@ -684,6 +684,11 @@ export interface components {
              * @example 550e8400-e29b-41d4-a716-446655440000
              */
             created_by_user_id: string;
+
+            user: {
+                id: string,
+                full_name: string,
+            };
         };
         GetAllEventsResponseDto: {
             /** @description HTTP status code */
@@ -1002,7 +1007,7 @@ export interface components {
         SignUpAuthDto: {
             email: string;
             password: string;
-            enrollment?: string;
+            enrollment: string;
             profileId?: string;
         };
         CreateTccDto: Record<string, never>;
