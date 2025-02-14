@@ -1,5 +1,5 @@
 import { getEvent } from '@/api/data/events.data';
-import { EventCreateSchema, Event, updateEventSchema } from '@/lib/types';
+import { EventCreateSchema, Event, createEventSchema } from '@/lib/types';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
@@ -21,7 +21,7 @@ export default function EventsEdit() {
   };
 
   const form = useForm<EventCreateSchema>({
-    resolver: zodResolver(updateEventSchema),
+    resolver: zodResolver(createEventSchema),
     defaultValues: event
       ? {
           name: event.name,
@@ -40,13 +40,20 @@ export default function EventsEdit() {
     fetchEvent(id);
   }, [location.pathname, navigate]);
 
-  const handleSubmit = async (data: EventCreateSchema) => {
+  const handleSubmit = async (
+    data: Omit<EventCreateSchema, 'eventStartTime' | 'eventEndTime'>
+  ) => {
     if (!event) {
       return;
     }
     const result = await patch(event?.id, data);
-    if (result) {
-      navigate('/events');
+    if (result !== undefined) {
+      navigate('/events', {
+        state: {
+          action: 'update',
+          message: 'Evento atualizado com sucesso',
+        },
+      });
     }
   };
 
