@@ -142,6 +142,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/events/user-events/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["EventsController_getMyEvents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/roles": {
         parameters: {
             query?: never;
@@ -469,68 +485,9 @@ export interface components {
         CreateUserDto: {
             email: string;
             password: string;
+            full_name: string;
             enrollment: string;
             profileId: string;
-        };
-        CreateUserResponseDto: {
-            /** @description HTTP status code */
-            status: number;
-            /** @description Response success status */
-            success: boolean;
-            /** @description Error */
-            error: Record<string, never>;
-            /** @example {
-             *       "user": {
-             *         "id": "550e8400-e29b-41d4-a716-446655440000",
-             *         "email": "john_doe",
-             *         "profile_id": "550e8400-e29b-41d4-a716-446655440000",
-             *         "created_at": "2021-01-01T00:00:00.000Z",
-             *         "updated_at": "2021-01-01T00:00:00.000Z"
-             *       }
-             *     } */
-            data: Record<string, never>;
-        };
-        Api500ResponseDto: {
-            /** @description HTTP status code */
-            status: number;
-            /** @description Response data */
-            data: Record<string, never>;
-            /** @description Response success status */
-            success: boolean;
-            /**
-             * @description Error message
-             * @example Internal server error
-             */
-            error: string;
-        };
-        GetAllUsersResponseDto: {
-            /** @description HTTP status code */
-            status: number;
-            /** @description Response success status */
-            success: boolean;
-            /** @description Error */
-            error: string | null;
-            /** @example {
-             *       "users": [
-             *         {
-             *           "id": "550e8400-e29b-41d4-a716-446655440000",
-             *           "email": "john_doe",
-             *           "profile_id": "550e8400-e29b-41d4-a716-446655440000",
-             *           "created_at": "2021-01-01T00:00:00.000Z",
-             *           "updated_at": "2021-01-01T00:00:00.000Z"
-             *         },
-             *         {
-             *           "id": "550e8400-e29b-41d4-a716-446655440000",
-             *           "email": "john_doe",
-             *           "profile_id": "550e8400-e29b-41d4-a716-446655440000",
-             *           "created_at": "2021-01-01T00:00:00.000Z",
-             *           "updated_at": "2021-01-01T00:00:00.000Z"
-             *         }
-             *       ]
-             *     } */
-            data: {
-                users: components["schemas"]["User"][];
-            };
         };
         User: {
             /**
@@ -571,6 +528,39 @@ export interface components {
              */
             updated_at: string;
         };
+        CreateUserResponseDto: {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Response success status */
+            success: boolean;
+            /** @description Error */
+            error: Record<string, never>;
+            data: components["schemas"]["User"];
+        };
+        Api500ResponseDto: {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Response data */
+            data: Record<string, never>;
+            /** @description Response success status */
+            success: boolean;
+            /**
+             * @description Error message
+             * @example Internal server error
+             */
+            error: string;
+        };
+        GetAllUsersResponseDto: {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Response success status */
+            success: boolean;
+            /** @description Error */
+            error: Record<string, never>;
+            data: {
+                users?: components["schemas"]["User"][];
+            };
+        };
         UpdateUserDto: Record<string, never>;
         CreateProfileDto: {
             name: string;
@@ -606,17 +596,9 @@ export interface components {
             success: boolean;
             /** @description Error */
             error: Record<string, never>;
-            /** @example {
-             *       "profiles": [
-             *         {
-             *           "id": "550e8400-e29b-41d4-a716-446655440000",
-             *           "name": "admin",
-             *           "createdAt": "2021-01-01T00:00:00.000Z",
-             *           "updatedAt": "2021-01-01T00:00:00.000Z"
-             *         }
-             *       ]
-             *     } */
-            data: Record<string, never>;
+            data: {
+                profiles?: components["schemas"]["Profile"][];
+            };
         };
         UpdateProfileDto: Record<string, never>;
         CreateEventDto: {
@@ -697,19 +679,14 @@ export interface components {
             success: boolean;
             /** @description Error */
             error: Record<string, never>;
-            /** @example {
-             *       "events": [
-             *         {
-             *           "id": "550e8400-e29b-41d4-a716-446655440000",
-             *           "name": "EVENT 1"
-             *         },
-             *         {
-             *           "id": "550e8400-e29b-41d4-a716-446655440001",
-             *           "name": "EVENT 2"
-             *         }
-             *       ]
-             *     } */
-            data: components["schemas"]["Event"][];
+            data: {
+                events?: components["schemas"]["Event"][];
+            };
+        };
+        GetEventResponseDataDto: {
+            event: components["schemas"]["Event"];
+            isStarted: boolean;
+            isEnded: boolean;
         };
         GetEventResponseDto: {
             /** @description HTTP status code */
@@ -718,19 +695,7 @@ export interface components {
             success: boolean;
             /** @description Error */
             error: Record<string, never>;
-            /** @example {
-             *       "event": {
-             *         "id": "550e8400-e29b-41d4-a716-446655440000",
-             *         "name": "EVENT 1"
-             *       },
-             *       "isStarted": true,
-             *       "isEnded": false
-             *     } */
-            data: {
-                event: components["schemas"]["Event"];
-                isStarted: boolean;
-                isEnded: boolean;
-            };
+            data: components["schemas"]["GetEventResponseDataDto"];
         };
         UpdateEventDto: Record<string, never>;
         EndEventResponseDto: {
@@ -743,9 +708,13 @@ export interface components {
             /** @example {
              *       "message": "Event ended"
              *     } */
-            data: Record<string, never>;
+            data: {
+                message?: string;
+            };
         };
-        CreateRoleDto: Record<string, never>;
+        CreateRoleDto: {
+            name: string;
+        };
         GetAllRolesResponseDto: {
             /** @description HTTP status code */
             status: number;
@@ -753,17 +722,9 @@ export interface components {
             success: boolean;
             /** @description Error */
             error: Record<string, never>;
-            /** @example {
-             *       "roles": [
-             *         {
-             *           "id": "550e8400-e29b-41d4-a716-446655440000",
-             *           "name": "admin",
-             *           "createdAt": "2021-01-01T00:00:00.000Z",
-             *           "updatedAt": "2021-01-01T00:00:00.000Z"
-             *         }
-             *       ]
-             *     } */
-            data: Record<string, never>;
+            data: {
+                roles?: components["schemas"]["Role"][];
+            };
         };
         UpdateRoleDto: Record<string, never>;
         CreateFileDto: {
@@ -778,18 +739,19 @@ export interface components {
             success: boolean;
             /** @description Error */
             error: Record<string, never>;
-            /** @example {
-             *       "file": {
-             *         "id": "550e8400-e29b-41d4-a716-446655440000",
-             *         "name": "example.pdf",
-             *         "type": "application/pdf",
-             *         "url": "../fileStorage",
-             *         "user_id": "550e8400-e29b-41d4-a716-446655440002",
-             *         "event_id": "550e8400-e29b-41d4-a716-446655440003"
-             *       },
-             *       "message": "File created successfully, you are able to upload it now"
-             *     } */
-            data: Record<string, never>;
+            data: {
+                file?: {
+                    id?: string;
+                    name?: string;
+                    user_id?: string;
+                    event_id?: string;
+                    /** @enum {unknown} */
+                    type?: "image" | "document" | "certificate";
+                    /** @enum {unknown} */
+                    status?: "waiting" | "processing" | "done" | "error";
+                };
+                message?: string;
+            };
         };
         GetFileStatusResponseDto: {
             /** @description HTTP status code */
@@ -802,7 +764,10 @@ export interface components {
              *       "id": "550e8400-e29b-41d4-a716-446655440000",
              *       "status": "pending"
              *     } */
-            data: Record<string, never>;
+            data: {
+                id?: string;
+                status?: string;
+            };
         };
         UploadFileDto: {
             /** Format: binary */
@@ -815,10 +780,10 @@ export interface components {
             success: boolean;
             /** @description Error */
             error: Record<string, never>;
-            /** @example {
-             *       "message": "File enqueued to be processed"
-             *     } */
-            data: Record<string, never>;
+            data: {
+                /** @example File downloaded successfully */
+                message?: string;
+            };
         };
         GetAllFilesResponseDto: {
             /** @description HTTP status code */
@@ -827,19 +792,9 @@ export interface components {
             success: boolean;
             /** @description Error */
             error: Record<string, never>;
-            /** @example {
-             *       "files": [
-             *         {
-             *           "id": "550e8400-e29b-41d4-a716-446655440000",
-             *           "name": "example.pdf",
-             *           "type": "application/pdf",
-             *           "url": "../fileStorage",
-             *           "user_id": "550e8400-e29b-41d4-a716-446655440002",
-             *           "event_id": "550e8400-e29b-41d4-a716-446655440003"
-             *         }
-             *       ]
-             *     } */
-            data: Record<string, never>;
+            data: {
+                files?: components["schemas"]["File"][];
+            };
         };
         GetFileResponseDto: {
             /** @description HTTP status code */
@@ -848,17 +803,18 @@ export interface components {
             success: boolean;
             /** @description Error */
             error: Record<string, never>;
-            /** @example {
-             *       "file": {
-             *         "id": "550e8400-e29b-41d4-a716-446655440000",
-             *         "name": "example.pdf",
-             *         "type": "application/pdf",
-             *         "url": "../fileStorage",
-             *         "user_id": "550e8400-e29b-41d4-a716-446655440002",
-             *         "event_id": "550e8400-e29b-41d4-a716-446655440003"
-             *       }
-             *     } */
-            data: Record<string, never>;
+            data: {
+                file?: {
+                    id?: string;
+                    name?: string;
+                    user_id?: string;
+                    event_id?: string;
+                    /** @enum {unknown} */
+                    type?: "image" | "document" | "certificate";
+                    /** @enum {unknown} */
+                    status?: "waiting" | "processing" | "done" | "error";
+                };
+            };
         };
         UpdateFileDto: Record<string, never>;
         CreatePresenceDto: {
@@ -900,23 +856,9 @@ export interface components {
             success: boolean;
             /** @description Error */
             error: Record<string, never>;
-            /** @example {
-             *       "data": {
-             *         "presences": [
-             *           {
-             *             "id": "550e8400-e29b-41d4-a716-446655440000",
-             *             "event_id": "550e8400-e29b-41d4-a716-446655440000",
-             *             "user_id": "550e8400-e29b-41d4-a716-446655440000"
-             *           },
-             *           {
-             *             "id": "550e8400-e29b-41d4-a716-446655440001",
-             *             "event_id": "550e8400-e29b-41d4-a716-446655440000",
-             *             "user_id": "550e8400-e29b-41d4-a716-446655440000"
-             *           }
-             *         ]
-             *       }
-             *     } */
-            data: Record<string, never>;
+            data: {
+                presences?: components["schemas"]["Presence"][];
+            };
         };
         GetPresenceResponseDto: {
             /** @description HTTP status code */
@@ -925,16 +867,16 @@ export interface components {
             success: boolean;
             /** @description Error */
             error: Record<string, never>;
-            /** @example {
-             *       "data": {
-             *         "presence": {
-             *           "id": "550e8400-e29b-41d4-a716-446655440000",
-             *           "event_id": "550e8400-e29b-41d4-a716-446655440000",
-             *           "user_id": "550e8400-e29b-41d4-a716-446655440000"
-             *         }
-             *       }
-             *     } */
-            data: Record<string, never>;
+            data: {
+                presence?: {
+                    id?: string;
+                    userId?: string;
+                    eventId?: string;
+                    isPresent?: boolean;
+                    createdAt?: string;
+                    updatedAt?: string;
+                };
+            };
         };
         UpdatePresenceDto: Record<string, never>;
         GetAllPresencesByEventResponseDto: {
@@ -944,23 +886,9 @@ export interface components {
             success: boolean;
             /** @description Error */
             error: Record<string, never>;
-            /** @example {
-             *       "data": {
-             *         "presences": [
-             *           {
-             *             "id": "550e8400-e29b-41d4-a716-446655440000",
-             *             "event_id": "550e8400-e29b-41d4-a716-446655440000",
-             *             "user_id": "550e8400-e29b-41d4-a716-446655440000"
-             *           },
-             *           {
-             *             "id": "550e8400-e29b-41d4-a716-446655440001",
-             *             "event_id": "550e8400-e29b-41d4-a716-446655440000",
-             *             "user_id": "550e8400-e29b-41d4-a716-446655440000"
-             *           }
-             *         ]
-             *       }
-             *     } */
-            data: Record<string, never>;
+            data: {
+                presences?: components["schemas"]["Presence"][];
+            };
         };
         GetAllPresencesByUserResponseDto: {
             /** @description HTTP status code */
@@ -969,30 +897,17 @@ export interface components {
             success: boolean;
             /** @description Error */
             error: Record<string, never>;
-            /** @example {
-             *       "data": {
-             *         "presences": [
-             *           {
-             *             "id": "550e8400-e29b-41d4-a716-446655440000",
-             *             "event_id": "550e8400-e29b-41d4-a716-446655440000",
-             *             "user_id": "550e8400-e29b-41d4-a716-446655440000"
-             *           },
-             *           {
-             *             "id": "550e8400-e29b-41d4-a716-446655440001",
-             *             "event_id": "550e8400-e29b-41d4-a716-446655440000",
-             *             "user_id": "550e8400-e29b-41d4-a716-446655440000"
-             *           }
-             *         ]
-             *       }
-             *     } */
-            data: Record<string, never>;
+            data: {
+                presences?: components["schemas"]["Presence"][];
+            };
         };
         SignInAuthDto: {
             email: string;
             password: string;
         };
-        AuthResponseDto: {
-            access_token: string
+        AccessTokenResponseDto: {
+            /** @example some-jwt-token */
+            access_token: string;
         };
         ApiResponseDto: {
             /** @description HTTP status code */
@@ -1007,6 +922,7 @@ export interface components {
         SignUpAuthDto: {
             email: string;
             password: string;
+            fullName: string;
             enrollment: string;
             profileId?: string;
         };
@@ -1018,18 +934,9 @@ export interface components {
             success: boolean;
             /** @description Error */
             error: Record<string, never>;
-            /** @example {
-             *       "tccs": [
-             *         {
-             *           "id": "550e8400-e29b-41d4-a716-446655440000",
-             *           "title": "TCC Title",
-             *           "advisorId": "550e8400-e29b-41d4-a716-446655440000",
-             *           "createdAt": "2021-01-01T00:00:00.000Z",
-             *           "updatedAt": "2021-01-01T00:00:00.000Z"
-             *         }
-             *       ]
-             *     } */
-            data: Record<string, never>;
+            data: {
+                tccs?: components["schemas"]["Tcc"][];
+            };
         };
         UpdateTccDto: Record<string, never>;
         CreateTccPresentationDto: Record<string, never>;
@@ -1040,18 +947,7 @@ export interface components {
             success: boolean;
             /** @description Error */
             error: Record<string, never>;
-            /** @example {
-             *       "tccPresentations": [
-             *         {
-             *           "id": "550e8400-e29b-41d4-a716-446655440000",
-             *           "presentationDate": "2021-01-01T00:00:00.000Z",
-             *           "tccId": "550e8400-e29b-41d4-a716-446655440000",
-             *           "createdAt": "2021-01-01T00:00:00.000Z",
-             *           "updatedAt": "2021-01-01T00:00:00.000Z"
-             *         }
-             *       ]
-             *     } */
-            data: string[];
+            data: components["schemas"]["TccPresentation"][];
         };
         UpdateTccPresentationDto: Record<string, never>;
         CreateTccStudentDto: {
@@ -1065,22 +961,146 @@ export interface components {
             success: boolean;
             /** @description Error */
             error: Record<string, never>;
-            /** @example {
-             *       "tccStudents": [
-             *         {
-             *           "id": "550e8400-e29b-41d4-a716-446655440000",
-             *           "studentId": "550e8400-e29b-41d4-a716-446655440000",
-             *           "tccId": "550e8400-e29b-41d4-a716-446655440000",
-             *           "createdAt": "2021-01-01T00:00:00.000Z",
-             *           "updatedAt": "2021-01-01T00:00:00.000Z"
-             *         }
-             *       ]
-             *     } */
-            data: Record<string, never>;
+            data: {
+                tccStudents?: components["schemas"]["TccStudents"][];
+            };
         };
         UpdateTccStudentDto: {
             students?: string[];
             tccId?: string;
+        };
+        Role: {
+            /**
+             * @description Unique identifier
+             * @example d290f1ee-6c54-4b01-90e6-d701748f0851
+             */
+            id: string;
+            /**
+             * @description Role name
+             * @example VIEW_ANY
+             */
+            name: string;
+            /**
+             * Format: date-time
+             * @description Date of creation
+             * @example 2021-09-01T00:00:00.000Z
+             */
+            created_at: string;
+            /**
+             * Format: date-time
+             * @description Date of last update
+             * @example 2021-09-01T00:00:00.000Z
+             */
+            updated_at: string;
+        };
+        Tcc: {
+            /**
+             * @description TCC ID
+             * @example 550e8400-e29b-41d4-a716-446655440000
+             */
+            id: string;
+            /**
+             * @description TCC title
+             * @example Title
+             */
+            theme: string;
+            /**
+             * @description Advisor ID
+             * @example 550e8400-e29b-41d4-a716-446655440000
+             */
+            advisor_id: string;
+            /**
+             * Format: date-time
+             * @description Created at
+             * @example 2021-01-01T00:00:00.000Z
+             */
+            created_at: string;
+            /**
+             * Format: date-time
+             * @description Updated at
+             * @example 2021-01-01T00:00:00.000Z
+             */
+            updated_at: string;
+        };
+        TccPresentation: {
+            /**
+             * @description TCC Presentation ID
+             * @example 550e8400-e29b-41d4-a716-446655440000
+             */
+            id: string;
+            /**
+             * @description TCC ID
+             * @example 550e8400-e29b-41d4-a716-446655440000
+             */
+            tcc_id: string;
+            /**
+             * @description Presentation type
+             * @example first
+             */
+            type: string;
+            /**
+             * Format: date-time
+             * @description Presentation date
+             * @example 2021-01-01T00:00:00.000Z
+             */
+            date: string;
+            /**
+             * Format: date-time
+             * @description Created at
+             * @example 2021-01-01T00:00:00.000Z
+             */
+            created_at: string;
+            /**
+             * Format: date-time
+             * @description Updated at
+             * @example 2021-01-01T00:00:00.000Z
+             */
+            updated_at: string;
+        };
+        TccStudents: {
+            /**
+             * @description TCC Student ID
+             * @example 550e8400-e29b-41d4-a716-446655440000
+             */
+            id: string;
+            /**
+             * @description TCC ID
+             * @example 550e8400-e29b-41d4-a716-446655440000
+             */
+            tcc_id: string;
+            /**
+             * @description Student ID
+             * @example 550e8400-e29b-41d4-a716-446655440000
+             */
+            student_id: string;
+            /**
+             * Format: date-time
+             * @description Created at
+             * @example 2021-01-01T00:00:00.000Z
+             */
+            created_at: string;
+            /**
+             * Format: date-time
+             * @description Updated at
+             * @example 2021-01-01T00:00:00.000Z
+             */
+            updated_at: string;
+        };
+        File: {
+            /** @example f6a6c5b2-4b9b-4f8f-8f5f-5d5f5f5f5f5f */
+            id: string;
+            /** @example file.txt */
+            name: string;
+            /** @example https://www.example.com/file.txt */
+            path: string;
+            /** @example image */
+            type: string;
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            user_id: string;
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            event_id: string;
+            /** @example waiting */
+            status: string;
         };
     };
     responses: never;
@@ -1339,7 +1359,10 @@ export interface operations {
     };
     EventsController_findAll: {
         parameters: {
-            query?: never;
+            query: {
+                offset: number;
+                limit: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1464,6 +1487,28 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["EndEventResponseDto"];
                 };
+            };
+        };
+    };
+    EventsController_getMyEvents: {
+        parameters: {
+            query: {
+                offset: number;
+                limit: number;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -1926,7 +1971,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AuthResponseDto"];
+                    "application/json": components["schemas"]["AccessTokenResponseDto"];
                 };
             };
             /** @description Invalid credentials */
@@ -1959,7 +2004,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AuthResponseDto"];
+                    "application/json": components["schemas"]["AccessTokenResponseDto"];
                 };
             };
         };
