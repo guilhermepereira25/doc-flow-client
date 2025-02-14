@@ -17,8 +17,8 @@ export default function ViewUserEventsBox({
     <div
       className={
         props.event.status === 'ended'
-          ? 'border border-slate-400 rounded-xl max-h-32 min-w-32 bg-sky-900'
-          : 'border border-slate-400 rounded-xl max-h-32 min-w-32'
+          ? 'border border-slate-400 rounded-xl max-h-32 min-w-32 bg-sky-900 transition delay-150 duration-300 ease-in-out hover:-translate-y-2 hover:scale-105 hover:bg-sky-700'
+          : 'border border-slate-400 rounded-xl max-h-32 min-w-32 transition delay-150 duration-300 ease-in-out hover:-translate-y-2 hover:scale-105'
       }
     >
       <div className="p-4">

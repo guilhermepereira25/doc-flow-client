@@ -47,21 +47,22 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
-    const checkAuthenticaion = async () => {
+    const checkAuthentication = async () => {
       if (accessToken && isLoading) {
         if (isTokenExpired(accessToken)) {
           setIsAuthenticated(false);
+          logout();
         } else if (!token && isAuthenticated != true) {
-          setIsAuthenticated(true);
           setToken(accessToken);
+          setIsAuthenticated(true);
         }
       }
       setIsLoading(false);
     };
 
-    checkAuthenticaion();
+    checkAuthentication();
     if (isLoading) return;
-  }, [isAuthenticated, isLoading, isTokenExpired, token]);
+  }, [isAuthenticated, isLoading, isTokenExpired, logout, token]);
 
   useEffect(() => {
     if (isLoading) return;
@@ -77,22 +78,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       if (location.pathname === '/login' || location.pathname === '/signup') {
         return;
       }
-      console.log('location', location);
       navigate('/login', { replace: true });
     }
   }, [isAuthenticated, location, navigate, isLoading]);
 
   useEffect(() => {
-    if (!token) {
+    if (isLoading || !token) {
       return;
     }
     const payload = decodeAndReturnPayload(token);
     if (!payload) {
       return;
     }
-    const user: UserPayload = userPayloadSchema.parse(payload);
-    setUser(user);
-  }, [token, decodeAndReturnPayload]);
+    if (user != null) {
+      return;
+    }
+    const userPayload: UserPayload = userPayloadSchema.parse(payload);
+    setUser(userPayload);
+  }, [token, decodeAndReturnPayload, isLoading, user]);
 
   return (
     <AuthContext.Provider
