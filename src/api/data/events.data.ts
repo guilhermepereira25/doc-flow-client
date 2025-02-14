@@ -6,7 +6,7 @@ export const getAllEvents = async (data: GetAllEvents): Promise<Event[] | undefi
         const eventService = new EventService();
         const response = await eventService.getAll(data);
         if (response.success) {
-            return response.data;
+            return response.data?.events;
         }
     } catch (error) {
         if (import.meta.env.DEV) {
@@ -34,7 +34,7 @@ export const getUserEvents = async (data: { id: string; offset: number; limit: n
         const eventService = new EventService();
         const response = await eventService.getUserEvents(data);
         if (response.success) {
-            return response.data;
+            return response.data?.events;
         }
     } catch (error) {
         if (import.meta.env.DEV) {
