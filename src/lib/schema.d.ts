@@ -1101,6 +1101,11 @@ export interface components {
             event_id: string;
             /** @example waiting */
             status: string;
+            created_at: string;
+            user: {
+                id: string,
+                full_name: string,
+            };
         };
     };
     responses: never;

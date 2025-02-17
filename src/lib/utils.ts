@@ -28,4 +28,5 @@ export const menuRoutes = [
   '/events',
   '/events/all',
   '/profile',
+  '/files',
 ]

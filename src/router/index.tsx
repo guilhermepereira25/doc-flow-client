@@ -11,21 +11,31 @@ import EventsUserView from '@/pages/events/EventsUserView';
 import EventsEdit from '@/pages/events/EventsEdit';
 import Profile from '@/pages/Profile';
 import NotFound from '@/pages/NotFound';
+import File from '@/pages/files/File';
+import ProfileRoute from '@/components/ProfileRoute';
 
 export default function Router() {
   return (
     <AuthProvider>
       <Routes>
         {/* Routes go here */}
-        <Route element={<PrivateRoute />} >
+        <Route element={<PrivateRoute />}>
           <Route path="/" element={<DefaultLayout />}>
             <Route index element={<Navigate to="/events" />} />
 
             <Route path="events">
-              <Route index element={<EventsUserView />} />
               <Route path="all" element={<EventsView />} />
-              <Route path="create" element={<EventsCreate />} />
-              <Route path=":eventId/edit" element={<EventsEdit />} />
+              <Route
+                element={<ProfileRoute profile={['admin', 'professor']} />}
+              >
+                <Route index element={<EventsUserView />} />
+                <Route path="create" element={<EventsCreate />} />
+                <Route path=":eventId/edit" element={<EventsEdit />} />
+              </Route>
+            </Route>
+
+            <Route path="files">
+              <Route index element={<File />} />
             </Route>
 
             <Route path="profile" element={<Profile />} />
