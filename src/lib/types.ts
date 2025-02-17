@@ -216,3 +216,8 @@ export type UpdateEvents = components['schemas']['UpdateEventDto'];
 /**
  * END EVENTS --------
  */
+
+export interface Pagination {
+    limit: number,
+    offset: number,
+}

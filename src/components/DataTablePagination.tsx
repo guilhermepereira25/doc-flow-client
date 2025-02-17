@@ -27,7 +27,7 @@ export default function DataTablePagination<TData>({
       <Button
         variant="outline"
         size="sm"
-        className="border rounded-xl w-"
+        className="border rounded-xl"
         onClick={() =>
           table.setPagination((prev) => ({
             ...prev,
@@ -35,7 +35,8 @@ export default function DataTablePagination<TData>({
           }))
         }
         disabled={
-          table.getState().pagination.pageIndex > table.getPageCount() - 1
+          table.getState().pagination.pageIndex > table.getPageCount() - 1 ||
+          table.getRowCount() < table.getState().pagination.pageSize
         }
       >
         Next

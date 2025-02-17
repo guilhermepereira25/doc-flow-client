@@ -67,6 +67,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               activeNavItem={activeNavItem === '/events/all'}
             />
             <NavMenuItem
+              text="Seus arquivos"
+              onClick={() =>
+                navigate('/files', {
+                  state: { from: { pathname: '/files' } },
+                })
+              }
+              activeNavItem={activeNavItem === '/files'}
+            />
+            <NavMenuItem
               text="Perfil"
               onClick={() =>
                 navigate('/profile', {
@@ -80,7 +89,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter>
-        <Button className='rounded-2xl bg-sky-900 text-white' onClick={() => logout()}>
+        <Button
+          className="rounded-2xl bg-sky-900 text-white"
+          onClick={() => logout()}
+        >
           Sair
         </Button>
       </SidebarFooter>
