@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { useState, ReactNode, useEffect } from 'react';
+import React, { useState, ReactNode, useEffect, useCallback } from 'react';
 import { createContext } from 'react';
 import {
   UserPayload,
@@ -22,41 +22,59 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const location = useLocation();
   const navigate = useNavigate();
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.clear();
     setIsAuthenticated(false);
-  };
+    navigate('/login', { replace: true });
+  }, [navigate]);
 
-  const decodeAndReturnPayload = (token: string): UserPayload => {
+  const decodeAndReturnPayload = useCallback((token: string) => {
     const payload = token.split('.')[1];
     //see: https://stackoverflow.com/questions/68849233/convert-a-string-to-base64-in-javascript-btoa-and-atob-are-deprecated
     const decodedPayload = atob(payload);
-    const jsonParsed = JSON.parse(decodedPayload);
-    return userPayloadSchema.parse(jsonParsed);
-  };
+    return JSON.parse(decodedPayload);
+  }, []);
+
+  const isTokenExpired = useCallback(
+    (token: string) => {
+      const payload = decodeAndReturnPayload(token);
+      if (!payload) return false;
+      const expirateDate = payload.exp * 1000;
+      return expirateDate < Date.now();
+    },
+    [decodeAndReturnPayload]
+  );
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
-    (async () => {
+    const checkAuthentication = async () => {
       if (accessToken && isLoading) {
-        setIsAuthenticated(true);
+        if (isTokenExpired(accessToken)) {
+          setIsAuthenticated(false);
+          logout();
+        } else if (!token && isAuthenticated != true) {
+          setToken(accessToken);
+          setIsAuthenticated(true);
+        }
       }
       setIsLoading(false);
-    })();
+    };
 
+    checkAuthentication();
     if (isLoading) return;
-  }, [isLoading]);
+  }, [isAuthenticated, isLoading, isTokenExpired, logout, token]);
 
   useEffect(() => {
+    if (isLoading) return;
     if (
       isAuthenticated &&
       (location.pathname === '/login' || location.pathname === '/signup')
     ) {
       const navigateFromTo = location.state?.from?.pathname || '/';
-      navigate(navigateFromTo, { replace: true });
+      navigate(navigateFromTo, { state: { from: 'refresh' } });
     }
 
-    if (!isAuthenticated && !isLoading) {
+    if (!isAuthenticated) {
       if (location.pathname === '/login' || location.pathname === '/signup') {
         return;
       }
@@ -65,15 +83,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }, [isAuthenticated, location, navigate, isLoading]);
 
   useEffect(() => {
-    if (!token) {
+    if (isLoading || !token) {
       return;
     }
-    const user = decodeAndReturnPayload(token);
-    if (!user) {
+    const payload = decodeAndReturnPayload(token);
+    if (!payload) {
       return;
     }
-    setUser(user);
-  }, [token]);
+    if (user != null) {
+      return;
+    }
+    const userPayload: UserPayload = userPayloadSchema.parse(payload);
+    setUser(userPayload);
+  }, [token, decodeAndReturnPayload, isLoading, user]);
 
   return (
     <AuthContext.Provider
@@ -84,6 +106,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         logout,
         isAuthenticated,
         setIsAuthenticated,
+        isLoading,
       }}
     >
       {children}
