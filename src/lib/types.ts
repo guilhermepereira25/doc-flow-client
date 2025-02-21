@@ -87,6 +87,7 @@ export const singupFormSchema = authFormSchema.merge(z.object({
     fullName: z.string().max(255, {
         message: 'Nome muito longo.',
     }),
+    profileId: z.string().min(1, { message: "O perfil é obrigatório." }),
 }));
 
 export type AuthFormSchema = z.infer<typeof authFormSchema>;

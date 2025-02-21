@@ -14,7 +14,9 @@ export default class ApiService {
   }
 
   async post(url: string, body: object) {
+    console.log("corpo req", body);
     const response = await this.axiosInstance.post(url, body);
+    console.log("resposta", response.data);
     return response.data;
   }
 
