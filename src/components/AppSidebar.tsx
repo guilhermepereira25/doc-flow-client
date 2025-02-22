@@ -17,12 +17,14 @@ import { useLocation, useNavigate } from 'react-router';
 import useAuth from '@/hooks/useAuth';
 import { menuRoutes } from '@/lib/utils';
 import { Button } from './ui/button';
+import useProfile from '@/hooks/useProfile';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeNavItem, setActiveNavItem] = React.useState<string>('');
   const { user, logout } = useAuth();
+  const { isUserAdminOrProfessor } = useProfile();
 
   const menuItems = React.useMemo(() => {
     return menuRoutes;
@@ -48,15 +50,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu className="space-y-1">
-            <NavMenuItem
-              text="Criar Evento"
-              onClick={() =>
-                navigate('/events', {
-                  state: { from: { pathname: '/events' } },
-                })
-              }
-              activeNavItem={activeNavItem === '/events'}
-            />
+            {isUserAdminOrProfessor && (
+              <NavMenuItem
+                text="Criar Evento"
+                onClick={() =>
+                  navigate('/events', {
+                    state: { from: { pathname: '/events' } },
+                  })
+                }
+                activeNavItem={activeNavItem === '/events'}
+              />
+            )}
             <NavMenuItem
               text="Todos eventos"
               onClick={() =>

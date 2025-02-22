@@ -6,9 +6,11 @@ import { Menu, User, Calendar, CalendarPlus, File } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import useProfile from '@/hooks/useProfile';
 
 export function MobileMenu() {
   const [open, setOpen] = React.useState(false);
+  const { isUserAdminOrProfessor } = useProfile();
 
   return (
     <header className="flex items-center justify-between px-4 py-2 bg-background border-b">
@@ -30,14 +32,16 @@ export function MobileMenu() {
                 <User className="h-5 w-5" />
                 <span>Perfil</span>
               </Link>
-              <Link
-                to={`/events`}
-                className="flex items-center space-x-2 text-sm font-medium"
-                onClick={() => setOpen(false)}
-              >
-                <CalendarPlus className="h-5 w-5" />
-                <span>Criar evento</span>
-              </Link>
+              {isUserAdminOrProfessor && (
+                <Link
+                  to={`/events`}
+                  className="flex items-center space-x-2 text-sm font-medium"
+                  onClick={() => setOpen(false)}
+                >
+                  <CalendarPlus className="h-5 w-5" />
+                  <span>Criar evento</span>
+                </Link>
+              )}
               <Link
                 to={`/events/all`}
                 className="flex items-center space-x-2 text-sm font-medium"
@@ -52,6 +56,6 @@ export function MobileMenu() {
       </div>
       <File />
     </header>
-  )
+  );
 }
 
