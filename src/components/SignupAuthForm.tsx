@@ -5,8 +5,7 @@ import type { useForm } from 'react-hook-form';
 import FormItemField from './FormItemField';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
+import ConfirmPassword from './ConfirmPassword';
 
 interface AuthFormProps {
   form: ReturnType<typeof useForm<SignupFormSchema>>;
@@ -26,7 +25,7 @@ export default function SignupAuthForm({ form, onSubmit }: AuthFormProps) {
       return;
     }
     form.clearErrors('password');
-  }
+  };
 
   useEffect(() => {
     if (location.pathname === '/signup') {
@@ -91,13 +90,7 @@ export default function SignupAuthForm({ form, onSubmit }: AuthFormProps) {
             />
           )}
         />
-        <Label>Confirmar senha</Label>
-        <Input
-          type='password'
-          placeholder='Confirmar senha'
-          className='rounded-2xl'
-          onChange={handleConfirmPassword}
-        />
+        <ConfirmPassword onchange={handleConfirmPassword} />
         <Button
           className="w-full bg-sky-900 text-white hover:bg-sky-700"
           type="submit"
