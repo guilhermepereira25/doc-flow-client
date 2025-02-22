@@ -12,7 +12,7 @@ import {
   SelectValue,
   SelectItem,
 } from '@/components/ui/select';
-import { EventCreateSchema, Event } from '@/lib/types';
+import { EventCreateSchema, Event } from '@/lib/schemas/event.schema';
 import FormItemField from '../FormItemField';
 import { UseFormReturn } from 'react-hook-form';
 import { Button } from '../ui/button';

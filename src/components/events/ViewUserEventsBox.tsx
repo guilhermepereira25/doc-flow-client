@@ -1,8 +1,6 @@
-import { components } from '@/lib/schema';
 import EventsEllipsisDropdown from '../EventsEllipsisDropdown';
 import { getEventsStatusText } from '@/lib/utils';
-
-type Event = components['schemas']['Event'];
+import { Event } from '@/lib/schemas/event.schema';
 
 type ViewUserEventsBoxProps = {
   event: Event;

@@ -15,7 +15,7 @@ import { useEffect, useMemo, useState } from 'react';
 import SearchBar from '../SearchBar';
 import DataTable from '../DataTable';
 import { getAllEvents } from '@/api/data/events.data';
-import { Event } from '@/lib/types';
+import { Event } from '@/lib/schemas/event.schema';
 import { getColumns } from './ViewEventsTableColumns';
 
 interface Pagination {
