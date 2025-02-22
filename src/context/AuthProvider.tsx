@@ -7,6 +7,7 @@ import {
   type AuthContextType,
 } from '@/lib/types';
 import { useLocation, useNavigate } from 'react-router';
+import LoadingOverlay from '@/components/LoadingOverlay';
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined
@@ -45,24 +46,44 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     [decodeAndReturnPayload]
   );
 
+  const loadUser = useCallback(
+    (token: string) => {
+      const payload = decodeAndReturnPayload(token);
+      if (!payload) return false;
+      const userPayload = userPayloadSchema.parse(payload);
+      setUser(userPayload);
+    },
+    [decodeAndReturnPayload]
+  );
+
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
+
     const checkAuthentication = async () => {
-      if (accessToken && isLoading) {
-        if (isTokenExpired(accessToken)) {
-          setIsAuthenticated(false);
-          logout();
-        } else if (!token && isAuthenticated != true) {
-          setToken(accessToken);
-          setIsAuthenticated(true);
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        if (accessToken && isLoading) {
+          if (isTokenExpired(accessToken)) {
+            logout();
+          } else if (!token && isAuthenticated != true) {
+            setToken(accessToken);
+            setIsAuthenticated(true);
+          }
+          loadUser(accessToken);
         }
+      } catch (err) {
+        if (import.meta.env.DEV) {
+          console.error(err);
+        }
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
     checkAuthentication();
     if (isLoading) return;
-  }, [isAuthenticated, isLoading, isTokenExpired, logout, token]);
+  }, [isAuthenticated, isLoading, isTokenExpired, loadUser, logout, token]);
 
   useEffect(() => {
     if (isLoading) return;
@@ -82,20 +103,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [isAuthenticated, location, navigate, isLoading]);
 
-  useEffect(() => {
-    if (isLoading || !token) {
-      return;
-    }
-    const payload = decodeAndReturnPayload(token);
-    if (!payload) {
-      return;
-    }
-    if (user != null) {
-      return;
-    }
-    const userPayload: UserPayload = userPayloadSchema.parse(payload);
-    setUser(userPayload);
-  }, [token, decodeAndReturnPayload, isLoading, user]);
+  if (isLoading) {
+    return <LoadingOverlay />;
+  }
 
   return (
     <AuthContext.Provider
