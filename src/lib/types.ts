@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { components } from "./schema";
+import { Profile } from "./enum/profile.enum";
 
 export interface ApiResponse<T> {
     status: number;
@@ -41,7 +42,7 @@ export const roleSchema = z.object({
 
 export const profileSchema = z.object({
     id: z.string(),
-    name: z.string(),
+    name: z.nativeEnum(Profile),
     roles: z.array(roleSchema),
 });
 

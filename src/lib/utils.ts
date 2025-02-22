@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { Profile } from "./enum/profile.enum";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -30,3 +31,7 @@ export const menuRoutes = [
   '/profile',
   '/files',
 ]
+
+export const superUsersProfiles = Object.keys(Profile).filter(
+  (profile) => profile !== Profile.Student && profile !== Profile.User
+);
