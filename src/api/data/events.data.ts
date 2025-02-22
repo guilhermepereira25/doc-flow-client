@@ -1,5 +1,5 @@
 import EventService from '../services/event.service';
-import { EventCreate, Event, GetAllEvents } from '@/lib/types';
+import { EventCreate, Event, GetAllEvents } from '@/lib/schemas/event.schema';
 
 export const getAllEvents = async (data: GetAllEvents): Promise<Event[] | undefined> => {
     try {

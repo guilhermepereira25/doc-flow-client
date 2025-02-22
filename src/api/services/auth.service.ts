@@ -1,3 +1,4 @@
+import { ChangePasswordDto } from '@/lib/schemas/auth/change-password.schema';
 import AbstractService from './abstract.service';
 export default class AuthService extends AbstractService {
   constructor() {
@@ -10,5 +11,9 @@ export default class AuthService extends AbstractService {
 
   async signup(email: string, password: string, enrollment: string, fullName: string) {
     return await this.api.post(this.basePath + '/signup', { email, password, enrollment, fullName });
+  }
+
+  async changePassword({ oldPassword, newPassword }: ChangePasswordDto) {
+    return await this.api.post(this.basePath + '/change-password', { oldPassword, newPassword });
   }
 }

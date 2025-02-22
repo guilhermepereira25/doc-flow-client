@@ -1,6 +1,6 @@
 import { ApiResponse } from '@/lib/types';
 import AbstractService from './abstract.service';
-import type { GetAllEventsResponseDto, EventCreate, GetEventResponseDto, Event } from '@/lib/types';
+import type { GetAllEventsResponseDto, EventCreate, GetEventResponseDto, Event } from '@/lib/schemas/event.schema';
 
 export default class AuthService extends AbstractService {
   constructor() {
