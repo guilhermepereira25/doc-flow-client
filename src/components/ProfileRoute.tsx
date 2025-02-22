@@ -1,16 +1,18 @@
-import { Outlet } from 'react-router';
+import { Navigate, Outlet } from 'react-router';
 import useProfile from '@/hooks/useProfile';
-import Forbidden from '@/pages/Forbidden';
+import { type ProfileEnum } from '@/lib/schemas/profile.schema';
 
 interface ProfileRouteProps {
-  profile: string[];
+  profile: ProfileEnum[];
 }
 
 const ProfileRoute = ({ ...props }: ProfileRouteProps) => {
-  const profile = useProfile();
-  return (
-    props.profile.includes(profile) ? <Outlet /> : <Forbidden /> 
-  )
+  const { profile } = useProfile();
+  return props.profile.includes(profile) ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/forbidden" />
+  );
 };
 
 export default ProfileRoute;
