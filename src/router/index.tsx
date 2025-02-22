@@ -13,6 +13,8 @@ import Profile from '@/pages/Profile';
 import NotFound from '@/pages/NotFound';
 import File from '@/pages/files/File';
 import ProfileRoute from '@/components/ProfileRoute';
+import ChangePassword from '@/pages/user/ChangePassword';
+import Forbidden from '@/pages/Forbidden';
 
 export default function Router() {
   return (
@@ -26,7 +28,7 @@ export default function Router() {
             <Route path="events">
               <Route path="all" element={<EventsView />} />
               <Route
-                element={<ProfileRoute profile={['admin', 'professor']} />}
+                element={<ProfileRoute profile={['Admin', 'Professor']} />}
               >
                 <Route index element={<EventsUserView />} />
                 <Route path="create" element={<EventsCreate />} />
@@ -39,6 +41,10 @@ export default function Router() {
             </Route>
 
             <Route path="profile" element={<Profile />} />
+
+            <Route path="user">
+              <Route path="changePassword" element={<ChangePassword />} />
+            </Route>
           </Route>
         </Route>
 
@@ -48,6 +54,7 @@ export default function Router() {
           <Route path="signup" element={<Signup />} />
         </Route>
 
+        <Route path="/forbidden" element={<Forbidden />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AuthProvider>
