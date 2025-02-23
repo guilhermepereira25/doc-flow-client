@@ -90,108 +90,151 @@ export const singupFormSchema = authFormSchema.merge(z.object({
     profileId: z.string().min(1, { message: "O perfil é obrigatório." }),
 }));
 
+export const presenceSchema = z.object({
+    event_id: z.string().min(1, { message: "O ID do evento é obrigatório." }),
+    status: z.string().min(1, { message: "O status é obrigatório." }),
+    check_out_date: z.string().min(1, { message: "A data de saída é obrigatória." }),
+    check_in_date: z.string().min(1, { message: "A data de saída é obrigatória." })
+});
+
 export type AuthFormSchema = z.infer<typeof authFormSchema>;
 
 export type SignupFormSchema = z.infer<typeof singupFormSchema>;
+
+export type PresenceFormSchema = z.infer<typeof presenceSchema>;
 
 /**
  * EVENTS --------
 */
 export const createEventSchema = z
-    .object({
-        name: z
-            .string({
-                message: 'Nome é obrigatório',
-            })
-            .max(255),
-        eventStartDate: z
-            .string({
-                message: 'Data de início é obrigatória',
-            })
-            .date(),
-        eventEndDate: z
-            .string({
-                message: 'Data de término é obrigatória',
-            })
-            .date(),
-        status: z.string(),
-        eventStartTime: z.string().regex(/\d{1,2}:\d{1,2}/),
-        eventEndTime: z.string().regex(/\d{1,2}:\d{1,2}/),
-    }).superRefine((val, ctx) => {
-        const now = new Date().toISOString();
+  .object({
+    name: z
+      .string({
+        message: 'Nome é obrigatório',
+      })
+      .max(255),
+    eventStartDate: z
+      .string({
+        message: 'Data de início é obrigatória',
+      })
+      .date(),
+    eventEndDate: z
+      .string({
+        message: 'Data de término é obrigatória',
+      })
+      .date(),
+    status: z.string(),
+    eventStartTime: z.string().regex(/\d{1,2}:\d{1,2}/),
+    eventEndTime: z.string().regex(/\d{1,2}:\d{1,2}/),
+    
+    latitude: z.preprocess(
+      (a) => Number(a),
+      z
+        .number({
+          required_error: 'Latitude é obrigatória',
+        })
+        .min(-90, { message: 'Latitude deve ser no mínimo -90' })
+        .max(90, { message: 'Latitude deve ser no máximo 90' })
+    ),
 
-        const [year, month, day] = val.eventStartDate.split('-').map(Number);
-        const [hour, minute] = val.eventStartTime.split(':').map(Number);
-        const zodEventStartDate = new Date(year, month - 1, day, hour, minute).toISOString();
-        if (val.status === 'upcoming') {
-            if (zodEventStartDate < now) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.invalid_date,
-                    message:
-                        'Evento próximo não pode possuir a data de inicio menor que agora',
-                    fatal: true,
-                    path: ['eventStartDate'],
-                });
+    longitude: z.preprocess(
+      (a) => Number(a),
+      z
+        .number({
+          required_error: 'Longitude é obrigatória',
+        })
+        .min(-180, { message: 'Longitude deve ser no mínimo -180' })
+        .max(180, { message: 'Longitude deve ser no máximo 180' })
+    ),
+    vagas: z.preprocess(
+        (a) => Number(a), 
+        z
+          .number({
+            required_error: 'O número de vagas é obrigatório',
+          })
+          .int({ message: 'O número de vagas deve ser um inteiro' }) 
+          .min(1, { message: 'O número de vagas deve ser pelo menos 1' }) 
+      ),
+  })
+  .superRefine((val, ctx) => {
+    const now = new Date().toISOString();
 
-                return z.NEVER;
-            }
-            return;
-        }
+    const [year, month, day] = val.eventStartDate.split('-').map(Number);
+    const [hour, minute] = val.eventStartTime.split(':').map(Number);
+    const zodEventStartDate = new Date(year, month - 1, day, hour, minute).toISOString();
+    if (val.status === 'upcoming') {
+      if (zodEventStartDate < now) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.invalid_date,
+          message: 'Evento próximo não pode possuir a data de inicio menor que agora',
+          fatal: true,
+          path: ['eventStartDate'],
+        });
 
-        const [endYear, endMonth, endDay] = val.eventEndDate.split('-').map(Number);
-        const [endHour, endMinute] = val.eventEndTime.split(':').map(Number);
-        const zodEventEndDate = new Date(endYear, endMonth - 1, endDay, endHour, endMinute).toISOString();
-        if (val.status === 'ended') {
-            if (zodEventEndDate < zodEventStartDate) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.invalid_date,
-                    message:
-                        'Evento encerrado não pode possuir a data de inicio maior que a data de termino',
-                    fatal: true,
-                    path: ['eventEndDate'],
-                });
+        return z.NEVER;
+      }
+      return;
+    }
 
-                return z.NEVER;
-            }
-            return;
-        }
+    const [endYear, endMonth, endDay] = val.eventEndDate.split('-').map(Number);
+    const [endHour, endMinute] = val.eventEndTime.split(':').map(Number);
+    const zodEventEndDate = new Date(endYear, endMonth - 1, endDay, endHour, endMinute).toISOString();
+    if (val.status === 'ended') {
+      if (zodEventEndDate < zodEventStartDate) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.invalid_date,
+          message: 'Evento encerrado não pode possuir a data de inicio maior que a data de termino',
+          fatal: true,
+          path: ['eventEndDate'],
+        });
 
-        if (val.status === 'started') {
-            if (zodEventStartDate > now) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.invalid_date,
-                    message:
-                        'Evento em andamento não pode possui uma data de inicio maior que agora',
-                    fatal: true,
-                    path: ['eventStartDate'],
-                });
-            }
-        }
-    }).transform(
-        ({
-            name,
-            status,
-            eventStartDate,
-            eventEndDate,
-            eventStartTime,
-            eventEndTime,
-        }) => {
-            const [startYear, startMonth, startDay] = eventStartDate.split('-').map(Number);
-            const [endYear, endMonth, endDay] = eventEndDate.split('-').map(Number);
-            const [startHour, startMinute] = eventStartTime.split(':').map(Number);
-            const [endHour, endMinute] = eventEndTime.split(':').map(Number);
-            const start = new Date(startYear, startMonth - 1, startDay, startHour, startMinute);
-            const end = new Date(endYear, endMonth - 1, endDay, endHour, endMinute);
-            return {
-                name,
-                status,
-                eventStartDate: start.toISOString(),
-                eventEndDate: end.toISOString(),
-                eventStartTime,
-                eventEndTime,
-            };
-        }
-    );
+        return z.NEVER;
+      }
+      return;
+    }
+
+    if (val.status === 'started') {
+      if (zodEventStartDate > now) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.invalid_date,
+          message: 'Evento em andamento não pode possui uma data de inicio maior que agora',
+          fatal: true,
+          path: ['eventStartDate'],
+        });
+      }
+    }
+  })
+  .transform(
+    ({
+      name,
+      status,
+      eventStartDate,
+      eventEndDate,
+      eventStartTime,
+      eventEndTime,
+      latitude,
+      longitude,
+      vagas,
+    }) => {
+      const [startYear, startMonth, startDay] = eventStartDate.split('-').map(Number);
+      const [endYear, endMonth, endDay] = eventEndDate.split('-').map(Number);
+      const [startHour, startMinute] = eventStartTime.split(':').map(Number);
+      const [endHour, endMinute] = eventEndTime.split(':').map(Number);
+      const start = new Date(startYear, startMonth - 1, startDay, startHour, startMinute);
+      const end = new Date(endYear, endMonth - 1, endDay, endHour, endMinute);
+      return {
+        name,
+        status,
+        eventStartDate: start.toISOString(),
+        eventEndDate: end.toISOString(),
+        eventStartTime,
+        eventEndTime,
+        latitude,
+        longitude,
+        vagas
+      };
+    }
+  );
 
 export type EventCreateSchema = z.infer<typeof createEventSchema>;
 
@@ -201,7 +244,21 @@ export type EventCreate = components['schemas']['CreateEventDto'];
 
 export type Event = components['schemas']['Event'];
 
+export type Presence = components['schemas']['Presence'];
+
+export type PresenceCreate = components['schemas']['CreatePresenceDto'];
+export type PresenceUpdate = components['schemas']['UpdatePresenceDto'];
+
+export type GetAllPresencesResponseDto = components['schemas']['GetAllPresencesResponseDto'];
+
+export type GetAllPresencesByUserResponseDto = components['schemas']['GetAllPresencesByUserResponseDto'];
+
 export type GetAllEvents = {
+    offset: number;
+    limit: number;
+}
+
+export type GetAllPresences = {
     offset: number;
     limit: number;
 }
