@@ -8,6 +8,10 @@ import {
   import { getEvent } from '@/api/data/events.data';
   import { useState, useEffect } from "react";
   import { Event } from "@/lib/types"; 
+  import { pdf } from "@react-pdf/renderer";
+import CertificatePDF from "./RelatorioPresencaPdfForm";
+import { saveAs } from "file-saver";
+import useAuth from '@/hooks/useAuth';
 
   
   interface PresenceFormCheckouProps {
@@ -63,12 +67,13 @@ function isWithinRange(
    const [event, setEvent] = useState<Event | null>(null);
    const [checkOutDate, setCheckOutDate] = useState<string>("");
    const [checkInDate, setCheckInDate]  = useState<string>("");
+   const { user } = useAuth(); 
 
 console.log("eventos iniciais", eventIds);
 console.log("presenca inicial", presences);
 console.log("evemto id", event?.id);
 
-    const handleCheckIn = async (data: PresenceFormSchema) => {
+    const handleCheckOut = async (data: PresenceFormSchema) => {
         if (!event) {
             console.log("erro aqui");
           alert('Evento não encontrado.');
@@ -81,6 +86,18 @@ console.log("evemto id", event?.id);
     
           if (isWithinRange(latitude, longitude, event.latitude, event.longitude)) {
             onSubmit(data);
+
+            
+             const certificateData = {
+                nome: user?.fullName, 
+                atividade: event.name,
+                horas: calculateHoursDifference(checkInDate,checkOutDate),  
+                dataInicio: formatDateTime(checkInDate),  
+                dataFim: formatDateTime(checkOutDate),  
+            };
+
+            const blob = await pdf(<CertificatePDF {...certificateData} />).toBlob();
+            saveAs(blob, "relatorioPresencaCheck.pdf");
           } else {
             alert('Você não está dentro da área do evento para realizar o check-in.');
           }
@@ -91,7 +108,37 @@ console.log("evemto id", event?.id);
       };
 
        
-     
+      const calculateHoursDifference = (start: string, end: string): number => {
+        if (!start || !end) return 0; 
+    
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+    
+        
+        const diferencaMili = endDate.getTime() - startDate.getTime();
+    
+  
+        const diferencaHora = diferencaMili / (1000 * 60 * 60);
+    
+        return Math.max(0, parseFloat(diferencaHora.toFixed(2))); 
+    };
+
+    const formatDateTime = (dateString: string): string => {
+        if (!dateString) return "";
+      
+        const date = new Date(dateString);
+      
+        const options: Intl.DateTimeFormatOptions = {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        };
+      
+        return new Intl.DateTimeFormat("pt-BR", options).format(date);
+      };
 
     const validateEventId = async (eventId: string) => {
         console.log("evento id", eventId);
@@ -215,7 +262,7 @@ useEffect(() => {
     return (
       <>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleCheckIn)}>
+          <form onSubmit={form.handleSubmit(handleCheckOut)}>
             <div className="grid grid-cols-3 p-4 space-x-4 max-md:space-x-0 max-md:flex max-md:flex-col max-md:space-y-4">
               <div className="p-4 flex flex-col space-y-3 border rounded-xl max-md:col-span-0">
                 <div>
