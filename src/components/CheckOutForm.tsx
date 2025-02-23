@@ -17,7 +17,7 @@ import useAuth from '@/hooks/useAuth';
   interface PresenceFormCheckouProps {
     form: UseFormReturn<PresenceFormSchema>;
     onSubmit: (data: PresenceFormSchema) => void;
-    eventIds: string[];
+    events: Event[];
     presences: Presence[];
   }
 
@@ -60,7 +60,7 @@ function isWithinRange(
     return distance <= radius;
   }
   
-  export default function PresencesForm({ form, onSubmit, eventIds, presences }: PresenceFormCheckouProps) {
+  export default function PresencesForm({ form, onSubmit, events, presences }: PresenceFormCheckouProps) {
 
     const [eventExists, setEventExists] = useState<boolean | null>(null); 
     const [loading, setLoading] = useState(false); 
@@ -69,7 +69,7 @@ function isWithinRange(
    const [checkInDate, setCheckInDate]  = useState<string>("");
    const { user } = useAuth(); 
 
-console.log("eventos iniciais", eventIds);
+
 console.log("presenca inicial", presences);
 console.log("evemto id", event?.id);
 
@@ -290,11 +290,11 @@ useEffect(() => {
         <option value="">Selecione um evento...</option>
 
 
-        {Array.from(new Set(eventIds)).map((id) => (
-          <option key={id} value={id}>
-            {id} 
-          </option>
-        ))}
+        {events.map((event) => (
+  <option key={event.id} value={event.id}>
+    {event.name}
+  </option>
+))}
       </select>
 
       

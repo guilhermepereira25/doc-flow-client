@@ -13,7 +13,7 @@ import {
   interface PresenceFormProps {
     form: UseFormReturn<PresenceFormSchema>;
     onSubmit: (data: PresenceFormSchema) => void;
-    eventIds: string[];
+    events: Event[];
     
   }
   const DEFAULT_RADIUS = 100; 
@@ -56,7 +56,7 @@ function isWithinRange(
     return distance <= radius;
   }
   
-  export default function PresencesForm({ form, onSubmit, eventIds }: PresenceFormProps) {
+  export default function PresencesForm({ form, onSubmit, events }: PresenceFormProps) {
 
     const [eventExists, setEventExists] = useState<boolean | null>(null); 
     const [loading, setLoading] = useState(false); 
@@ -173,22 +173,18 @@ useEffect(() => {
         id="event_id"
         className="w-full border rounded-md p-2"
         onChange={async (e) => {
-          const eventId = e.target.value; 
-          field.onChange(eventId); 
-          await validateEventId(eventId); 
+          const eventId = e.target.value;
+          field.onChange(eventId);
+          await validateEventId(eventId);
         }}
       >
-        <option value="">Selecione um evento...</option> 
-
-        
-        {Array.from(new Set(eventIds)).map((id) => (
-          <option key={id} value={id}>
-            {id} 
+        <option value="">Selecione um evento...</option>
+        {events.map((event) => (
+          <option key={event.id} value={event.id}>
+            {event.name}
           </option>
         ))}
       </select>
-
-      
       {form.formState.errors.event_id?.message && (
         <p className="text-red-500 text-sm mt-1">
           {form.formState.errors.event_id?.message}

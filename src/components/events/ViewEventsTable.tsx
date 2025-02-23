@@ -330,6 +330,14 @@ const fetchUserPresencesRegistered = async () => {
     table.getColumn('status')?.setFilterValue(status);
   };
 
+  const registeredEvents = data.filter(event =>
+    eventIdsFromPresencesRegistered.includes(event.id)
+  );
+
+  const presentEvents = data.filter(event =>
+    eventIdsFromPresences.includes(event.id)
+  );
+
   return (
     <div>
       <div>
@@ -418,7 +426,7 @@ const fetchUserPresencesRegistered = async () => {
 <CheckOutForm 
   form={form} 
   onSubmit={onSubmitUpdate} 
-  eventIds={eventIdsFromPresences}
+  events={presentEvents}
   presences={presences}
 />
 
@@ -458,7 +466,7 @@ const fetchUserPresencesRegistered = async () => {
       )}
 
          
-              <CheckInForm form={form} onSubmit={onSubmit} eventIds={eventIdsFromPresencesRegistered} />
+            <CheckInForm form={form} onSubmit={onSubmit} events={registeredEvents} />
               
               
 
