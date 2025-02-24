@@ -8,6 +8,7 @@ export default class AuthService extends AbstractService {
   }
 
   async getAll(data: { offset: number, limit: number }): Promise<GetAllEventsResponseDto> {
+    console.log(this.basePath + `?offset=${data.offset}&limit=${data.limit}`);
     return await this.api.get(this.basePath + `?offset=${data.offset}&limit=${data.limit}`);
   }
 

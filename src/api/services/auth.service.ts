@@ -9,8 +9,8 @@ export default class AuthService extends AbstractService {
     return await this.api.post(this.basePath + '/signin', { email, password });
   }
 
-  async signup(email: string, password: string, enrollment: string, fullName: string) {
-    return await this.api.post(this.basePath + '/signup', { email, password, enrollment, fullName });
+  async signup(email: string, password: string, enrollment: string, fullName: string, profileId: string) {
+    return await this.api.post(this.basePath + '/signup', { email, password, enrollment, fullName, profileId });
   }
 
   async changePassword({ oldPassword, newPassword }: ChangePasswordDto) {

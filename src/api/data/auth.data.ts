@@ -18,9 +18,14 @@ export const getAccessToken = async ({ email, password }: AuthSigninBody): Promi
   }
 };
 
-export const signup = async ({ email, password, enrollment, fullName }: AuthSignupBody): Promise<string | undefined> => {
+export const signup = async ({ email, password, enrollment, fullName, profileId }: AuthSignupBody): Promise<string | undefined> => {
   try {
-    const data: AuthSignupResponse = await authServiceInstance.signup(email, password, enrollment, fullName);
+    if (!enrollment || !fullName || !profileId) {
+      throw new Error('Campos vazios não são permitidos');
+    }
+    console.log(email, password, enrollment, fullName, profileId);
+    const authServiceInstance = new AuthService();
+    const data: AuthSignupResponse = await authServiceInstance.signup(email, password, enrollment, fullName, profileId);
     return data.access_token;
   } catch (err) {
     console.error(err);

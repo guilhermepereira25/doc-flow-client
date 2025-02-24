@@ -5,6 +5,9 @@ import type { useForm } from 'react-hook-form';
 import FormItemField from './FormItemField';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { getProfileId } from '../api/data/profile.data'; 
 import ConfirmPassword from './ConfirmPassword';
 
 interface AuthFormProps {
@@ -16,6 +19,9 @@ export default function SignupAuthForm({ form, onSubmit }: AuthFormProps) {
   const [isRegister, setIsRegister] = useState(false);
   const location = useLocation();
 
+  const [role, setRole] = useState<string>(""); 
+  const [profileId, setProfileId] = useState<string>(""); 
+
   const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value !== form.getValues('password')) {
       form.setError('password', {
@@ -26,6 +32,18 @@ export default function SignupAuthForm({ form, onSubmit }: AuthFormProps) {
     }
     form.clearErrors('password');
   };
+
+
+  useEffect(() => {
+    if (role) {
+      getProfileId(role, { limit: 10, offset: 0 }).then((id) => {
+        if (id) {
+          setProfileId(id); 
+          form.setValue("profileId", id); 
+        }
+      });
+    }
+  }, [role]); 
 
   useEffect(() => {
     if (location.pathname === '/signup') {
@@ -77,6 +95,45 @@ export default function SignupAuthForm({ form, onSubmit }: AuthFormProps) {
             />
           )}
         />
+
+        
+        <div>
+          <Label>Você é:</Label>
+          <select
+            className="w-full border rounded-md p-2"
+            value={role}
+            onChange={(e) => {
+              setRole(e.target.value);
+              setProfileId(""); 
+            }}
+          >
+            <option value="">Selecione...</option> 
+            <option value="student">Aluno</option>
+            <option value="admin">Professor</option>
+          </select>
+        </div>
+
+        
+        <FormField
+          control={form.control}
+          name="profileId"
+          render={({ field }) => (
+            <div className="hidden">
+              <Label>Perfil Selecionado:</Label>
+              <select {...field} className="w-full border rounded-md p-2" disabled>
+                {profileId ? (
+                  <option value={profileId}>Perfil encontrado ({profileId})</option>
+                ) : (
+                  <option value="">Selecione um tipo de usuário primeiro</option>
+                )}
+              </select>
+              {form.formState.errors.profileId && (
+                <p className="text-red-500">{form.formState.errors.profileId.message}</p>
+              )}
+            </div>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="password"
@@ -90,6 +147,15 @@ export default function SignupAuthForm({ form, onSubmit }: AuthFormProps) {
             />
           )}
         />
+        <Label>Confirmar senha</Label>
+        <Input
+          type="password"
+          placeholder="Confirmar senha"
+          className="rounded-2xl"
+          onChange={handleConfirmPassword}
+        />
+
+        <Button className="w-full bg-sky-900 text-white hover:bg-sky-700" type="submit">
         <ConfirmPassword onchange={handleConfirmPassword} />
         <Button
           className="w-full bg-sky-900 text-white hover:bg-sky-700"

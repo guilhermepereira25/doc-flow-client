@@ -651,6 +651,9 @@ export interface components {
              * @example upcoming
              */
             status: string;
+            latitude: number;
+            longitude:number;
+            vagas:number;
         };
         Event: {
             /**
@@ -698,6 +701,12 @@ export interface components {
              * @example 550e8400-e29b-41d4-a716-446655440000
              */
             created_by_user_id: string;
+
+            latitude: number;
+
+            longitude: number;
+
+            vagas: number;
 
             user: {
                 id: string,
@@ -851,6 +860,9 @@ export interface components {
         UpdateFileDto: Record<string, never>;
         CreatePresenceDto: {
             event_id: string;
+            status: string;
+            check_out_date: string;
+            check_in_date: string;
         };
         Presence: {
             /**
@@ -880,6 +892,11 @@ export interface components {
              * @example 2021-01-01T00:00:00.000Z
              */
             updated_at: string;
+
+            status: string;
+
+            check_out_date: string;
+            check_in_date: string;
         };
         GetAllPresencesResponseDto: {
             /** @description HTTP status code */
@@ -910,7 +927,13 @@ export interface components {
                 };
             };
         };
-        UpdatePresenceDto: Record<string, never>;
+        UpdatePresenceDto: 
+        {
+            event_id: string;
+            status: string;
+            check_out_date: string;
+            check_in_date: string;
+        }
         GetAllPresencesByEventResponseDto: {
             /** @description HTTP status code */
             status: number;

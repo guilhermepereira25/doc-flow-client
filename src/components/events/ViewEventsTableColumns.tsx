@@ -42,25 +42,21 @@ export function getColumns(): ColumnDef<Event>[] {
       header: 'Criado Por',
       cell: ({ row }) => {
         return (
-          <>
-            <div className="flex items-center">
-              <Avatar>
-                <AvatarImage
-                  src={
-                    row.original.user?.full_name.charAt(0).toLowerCase() || ''
-                  }
-                  alt={row.original.user?.full_name}
-                />
-                <AvatarFallback className="rounded-lg">
-                  {row.original.user?.full_name
-                    .split(' ')
-                    .map((n) => n[0])
-                    .join('')}
-                </AvatarFallback>
-              </Avatar>
-              <span className="ml-2">{row.original.user?.full_name}</span>
-            </div>
-          </>
+          <div className="flex items-center">
+            <Avatar>
+              <AvatarImage
+                src={row.original.user?.full_name.charAt(0).toLowerCase() || ''}
+                alt={row.original.user?.full_name}
+              />
+              <AvatarFallback className="rounded-lg">
+                {row.original.user?.full_name
+                  .split(' ')
+                  .map((n) => n[0])
+                  .join('')}
+              </AvatarFallback>
+            </Avatar>
+            <span className="ml-2">{row.original.user?.full_name}</span>
+          </div>
         );
       },
     },
@@ -105,6 +101,14 @@ export function getColumns(): ColumnDef<Event>[] {
         const date = new Date(row.original.end_at);
         const dateFormated = date.toLocaleString('pt-BR');
         return <span>{dateFormated}</span>;
+      },
+    },
+    {
+      accessorKey: 'vagas', 
+      header: 'Vagas',
+      cell: ({ row }) => {
+        const vacancies = row.original.vagas;
+        return <span>{vacancies ?? '0'}</span>; 
       },
     },
   ];

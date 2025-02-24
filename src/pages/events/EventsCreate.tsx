@@ -19,6 +19,8 @@ export default function EventsCreate() {
       status: 'upcoming',
       eventStartDate: '',
       eventEndDate: '',
+      latitude: 0,
+      longitude: 0
     },
   });
 
