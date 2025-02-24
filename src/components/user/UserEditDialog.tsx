@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { CreateUser, createUserSchema } from '@/lib/schemas/user.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import {
   Select,
@@ -20,29 +21,48 @@ import {
   SelectContent,
   SelectValue,
 } from '../ui/select';
+import { ProfileSchema } from '@/lib/schemas/profile.schema';
+import { getProfiles } from '@/api/data/profile.data';
 import { cn } from '@/lib/utils';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import useProfile from '@/hooks/useProfile';
 import { updateUserPatchVerb } from '@/api/data/users.data';
 import useUser from '@/hooks/useUser';
-import useProfiles from '@/hooks/useProfiles';
 
 export default function UserEditDialog() {
-  const profiles = useProfiles();
+  const [profiles, setProfiles] = useState<ProfileSchema[]>([]);
   const { user } = useUser();
   const { isUserProfileAdminOrProfessor } = useProfile();
 
   const form = useForm<CreateUser>({
     resolver: zodResolver(createUserSchema),
-    defaultValues: async () => {
-      return {
-        fullName: user?.full_name || '',
-        email: user?.email || '',
-        enrollment: user?.enrollment || '',
-        profile_id: user?.profile_id || '',
-      };
+    defaultValues: {
+      fullName: user?.full_name || '',
+      email: user?.email || '',
+      enrollment: user?.enrollment || '',
+      profile_id: user?.profile_id || '',
     },
   });
+
+  const fetchProfiles = async () => {
+    const profiles = await getProfiles();
+    if (!profiles) return;
+    if (import.meta.env.DEV) toast.info('Perfis carregados com sucesso');
+    setProfiles(profiles);
+  };
+
+  useEffect(() => {
+    fetchProfiles();
+  }, []);
+
+  useEffect(() => {
+    form.reset({
+      fullName: user?.full_name || '',
+      email: user?.email || '',
+      enrollment: user?.enrollment || '',
+      profile_id: user?.profile_id || '',
+    });
+  }, [form, user]);
 
   const handleSubmit = async (data: CreateUser) => {
     if (!user) return;
@@ -56,7 +76,7 @@ export default function UserEditDialog() {
 
   return (
     <Dialog onOpenChange={(isOpen) => !isOpen && form.reset()}>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button
           variant="link"
           className="mr-2 bg-white border border-neutral-400 rounded-lg w-52"
