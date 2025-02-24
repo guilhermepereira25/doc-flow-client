@@ -1,20 +1,20 @@
-import DefaultLayout from '@/layouts/DefaultLayout';
-import { Routes, Route, Navigate } from 'react-router';
-import PrivateRoute from '@/components/PrivateRoute';
-import AuthLayout from '@/layouts/AuthLayout';
-import Login from '@/pages/auth/Login';
-import { AuthProvider } from '@/context/AuthProvider';
-import Signup from '@/pages/auth/Signup';
-import EventsView from '@/pages/events/EventsView';
-import EventsCreate from '@/pages/events/EventsCreate';
-import EventsUserView from '@/pages/events/EventsUserView';
-import EventsEdit from '@/pages/events/EventsEdit';
-import Profile from '@/pages/Profile';
-import NotFound from '@/pages/NotFound';
-import File from '@/pages/files/File';
-import ProfileRoute from '@/components/ProfileRoute';
-import ChangePassword from '@/pages/user/ChangePassword';
-import Forbidden from '@/pages/Forbidden';
+import DefaultLayout from "@/layouts/DefaultLayout";
+import { Routes, Route, Navigate } from "react-router";
+import PrivateRoute from "@/components/PrivateRoute";
+import AuthLayout from "@/layouts/AuthLayout";
+import Login from "@/pages/auth/Login";
+import { AuthProvider } from "@/context/AuthProvider";
+import Signup from "@/pages/auth/Signup";
+import EventsView from "@/pages/events/EventsView";
+import EventsCreate from "@/pages/events/EventsCreate";
+import EventsUserView from "@/pages/events/EventsUserView";
+import EventsEdit from "@/pages/events/EventsEdit";
+import Profile from "@/pages/Profile";
+import NotFound from "@/pages/NotFound";
+import File from "@/pages/files/File";
+import ProfileRoute from "@/components/ProfileRoute";
+import ChangePassword from "@/pages/user/ChangePassword";
+import Forbidden from "@/pages/Forbidden";
 
 export default function Router() {
   return (
@@ -28,7 +28,7 @@ export default function Router() {
             <Route path="events">
               <Route path="all" element={<EventsView />} />
               <Route
-                element={<ProfileRoute profile={['Admin', 'Professor']} />}
+                element={<ProfileRoute profile={["Admin", "Professor"]} />}
               >
                 <Route index element={<EventsUserView />} />
                 <Route path="create" element={<EventsCreate />} />

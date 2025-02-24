@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import * as React from "react";
 import { Link } from "react-router";
@@ -6,7 +6,7 @@ import { Menu, User, Calendar, CalendarPlus, File } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import useProfile from '@/hooks/useProfile';
+import useProfile from "@/hooks/useProfile";
 
 export function MobileMenu() {
   const [open, setOpen] = React.useState(false);
@@ -58,4 +58,3 @@ export function MobileMenu() {
     </header>
   );
 }
-

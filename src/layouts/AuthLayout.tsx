@@ -1,8 +1,8 @@
-import { Outlet } from 'react-router';
-import logo from '@/assets/cefet-logo.png';
-import { useState, useEffect, createContext } from 'react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
+import { Outlet } from "react-router";
+import logo from "@/assets/cefet-logo.png";
+import { useState, useEffect, createContext } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 interface AuthErrorContextProps {
   setError: (error: string | null) => void;
@@ -14,14 +14,14 @@ export const AuthErrorContext = createContext<
 >(undefined);
 
 export default function AuthLayout() {
-  const [text, setText] = useState<string>('');
+  const [text, setText] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const texts = [
-      'Acesse seu evento',
-      'Crie e adicione eventos',
-      'Acesse, crie e adicione eventos',
+      "Acesse seu evento",
+      "Crie e adicione eventos",
+      "Acesse, crie e adicione eventos",
     ];
     let index = 0;
     const interval = setInterval(() => {

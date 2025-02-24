@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   ColumnFiltersState,
@@ -6,29 +6,37 @@ import {
   getFilteredRowModel,
   useReactTable,
   VisibilityState,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
 
-import CheckInForm from "../CheckInForm"; 
-import CheckOutForm from "../CheckOutForm"; 
-import { PresenceCreate, PresenceFormSchema,presenceSchema } from "@/lib/types"; 
+import CheckInForm from "../CheckInForm";
+import CheckOutForm from "../CheckOutForm";
+import {
+  PresenceCreate,
+  PresenceFormSchema,
+  presenceSchema,
+} from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as Dialog from "@radix-ui/react-dialog";
 
-import { BadgeMinus } from 'lucide-react';
+import { BadgeMinus } from "lucide-react";
 
-import { Button } from '../ui/button';
-import { useEffect, useMemo, useState } from 'react';
-import SearchBar from '../SearchBar';
-import DataTable from '../DataTable';
-import { getAllEvents } from '@/api/data/events.data';
-import { Event } from '@/lib/schemas/event.schema';
-import { Presence } from '@/lib/types';
-import { getColumns } from './ViewEventsTableColumns';
-import { createPresence, getUserPresences, patchPresence } from '@/api/data/presence.data';
-import { patch } from '@/api/data/events.data';
-import useAuth from '@/hooks/useAuth';
-import toast, { Toaster } from 'react-hot-toast';
+import { Button } from "../ui/button";
+import { useEffect, useMemo, useState } from "react";
+import SearchBar from "../SearchBar";
+import DataTable from "../DataTable";
+import { getAllEvents } from "@/api/data/events.data";
+import { Event } from "@/lib/schemas/event.schema";
+import { Presence } from "@/lib/types";
+import { getColumns } from "./ViewEventsTableColumns";
+import {
+  createPresence,
+  getUserPresences,
+  patchPresence,
+} from "@/api/data/presence.data";
+import { patch } from "@/api/data/events.data";
+import useAuth from "@/hooks/useAuth";
+import toast, { Toaster } from "react-hot-toast";
 
 interface Pagination {
   pageIndex: number;
@@ -40,16 +48,21 @@ export function ViewEventsDataTable() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [presences, setPresences] = useState<Presence[]>([]);
-  const [presencesRegistered, setPresencesRegistered] = useState<Presence[]>([]);
-  const [openCheckIn, setOpenCheckIn] = useState(false); 
-  const [openCheckOut, setOpenCheckOut] = useState(false); 
+  const [presencesRegistered, setPresencesRegistered] = useState<Presence[]>(
+    [],
+  );
+  const [openCheckIn, setOpenCheckIn] = useState(false);
+  const [openCheckOut, setOpenCheckOut] = useState(false);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [activeFilter, setActiveFilter] = useState<string>('');
+  const [activeFilter, setActiveFilter] = useState<string>("");
   const [rowSelection, setRowSelection] = useState({});
-  const [eventIdsFromPresences, setEventIdsFromPresences] = useState<string[]>([]);
-  const [eventIdsFromPresencesRegistered, setEventIdsFromPresencesRegistered] = useState<string[]>([]); 
-  const { user } = useAuth(); 
+  const [eventIdsFromPresences, setEventIdsFromPresences] = useState<string[]>(
+    [],
+  );
+  const [eventIdsFromPresencesRegistered, setEventIdsFromPresencesRegistered] =
+    useState<string[]>([]);
+  const { user } = useAuth();
   const [pagination, setPagination] = useState<Pagination>({
     pageIndex: 0,
     pageSize: 10,
@@ -68,30 +81,30 @@ export function ViewEventsDataTable() {
 
   const handleSubscribe = async () => {
     const selectedRows = table.getFilteredSelectedRowModel().rows;
-    
+
     if (selectedRows.length === 0) {
       toast.error("Nenhum evento selecionado para inscrição.");
       return;
     }
     const newEvents = selectedRows.filter(
-      (row) => !eventIdsFromPresences.includes(row.original.id)
+      (row) => !eventIdsFromPresences.includes(row.original.id),
     );
-  
+
     if (newEvents.length === 0) {
       toast.error("Você já está inscrito em todos os eventos selecionados.");
       return;
     }
-    
+
     for (const row of newEvents) {
       const eventId = row.original.id;
       const valVacancies = row.original.vacancies;
-      console.log('nome vaga: ', row.original.name);
+      console.log("nome vaga: ", row.original.name);
 
       const payload: PresenceCreate = {
         event_id: eventId,
-        status: 'registered',
-        check_out_date: '',
-        check_in_date: '',
+        status: "registered",
+        check_out_date: "",
+        check_in_date: "",
       };
 
       try {
@@ -99,7 +112,7 @@ export function ViewEventsDataTable() {
           const result = await createPresence(payload);
           if (result) {
             toast.success(
-              `Inscrições realizadas com sucesso! Agora você pode realizar check-ins no evento  ${row.original.name}.`
+              `Inscrições realizadas com sucesso! Agora você pode realizar check-ins no evento  ${row.original.name}.`,
             );
             if (valVacancies > 0)
               patch(eventId, {
@@ -114,7 +127,7 @@ export function ViewEventsDataTable() {
             toast.success(
               `Número de vacancies no evento ${row.original.name}: ${
                 row.original.vacancies - 1
-              }`
+              }`,
             );
           } else {
             toast.error(`Erro ao inscrever no evento ${row.original.name}`);
@@ -125,101 +138,104 @@ export function ViewEventsDataTable() {
       } catch (error) {
         console.error(
           `Erro ao criar presença para o evento ${eventId}:`,
-          error
+          error,
         );
         toast.error(`Erro ao inscrever no evento ${eventId}`);
       }
     }
-    
-    
   };
-  
-
-  
 
   const fetchUserPresences = async () => {
     if (!user?.sub) return;
 
     try {
-        console.log("Buscando presenças do usuário...");
-        const response = await getUserPresences({ id: user?.sub, offset: 0, limit: 10 });
-        console.log("Presenças do usuário:", response);
-        if (response && response.length > 0) {
-          setPresences(response);
-          
-            const filteredEventIds = response
-                .filter((presence) => presence.status === "present") 
-                .map((presence) => presence.event_id); 
+      console.log("Buscando presenças do usuário...");
+      const response = await getUserPresences({
+        id: user?.sub,
+        offset: 0,
+        limit: 10,
+      });
+      console.log("Presenças do usuário:", response);
+      if (response && response.length > 0) {
+        setPresences(response);
 
-            setEventIdsFromPresences(filteredEventIds); 
+        const filteredEventIds = response
+          .filter((presence) => presence.status === "present")
+          .map((presence) => presence.event_id);
 
-            console.log("IDs dos eventos válidos para Check-Out:", filteredEventIds);
-        } else {
-          setPresences([]);
-            setEventIdsFromPresences([]); 
-            console.log("Nenhuma presença válida encontrada.");
-        }
-    } catch (error) {
-        console.error("Erro ao buscar presenças:", error);
+        setEventIdsFromPresences(filteredEventIds);
+
+        console.log(
+          "IDs dos eventos válidos para Check-Out:",
+          filteredEventIds,
+        );
+      } else {
         setPresences([]);
-        setEventIdsFromPresences([]); 
+        setEventIdsFromPresences([]);
+        console.log("Nenhuma presença válida encontrada.");
+      }
+    } catch (error) {
+      console.error("Erro ao buscar presenças:", error);
+      setPresences([]);
+      setEventIdsFromPresences([]);
     }
-};
+  };
 
-const fetchUserPresencesRegistered = async () => {
-  if (!user?.sub) return; 
+  const fetchUserPresencesRegistered = async () => {
+    if (!user?.sub) return;
 
-  try {
-    console.log("Buscando presenças do usuário...");
-    const response = await getUserPresences({ id: user?.sub, offset: 0, limit: 10 });
+    try {
+      console.log("Buscando presenças do usuário...");
+      const response = await getUserPresences({
+        id: user?.sub,
+        offset: 0,
+        limit: 10,
+      });
 
-    if (response && response.length > 0) {
-      setPresencesRegistered(response);
-      
-      const filteredEventIds = response
-        .filter((presence) => presence.status === "registered")
-        .map((presence) => presence.event_id);
+      if (response && response.length > 0) {
+        setPresencesRegistered(response);
 
-      setEventIdsFromPresencesRegistered(filteredEventIds);
-      console.log("IDs dos eventos válidos para Check-Out:", filteredEventIds);
-    } else {
+        const filteredEventIds = response
+          .filter((presence) => presence.status === "registered")
+          .map((presence) => presence.event_id);
+
+        setEventIdsFromPresencesRegistered(filteredEventIds);
+        console.log(
+          "IDs dos eventos válidos para Check-Out:",
+          filteredEventIds,
+        );
+      } else {
+        setPresencesRegistered([]);
+        setEventIdsFromPresencesRegistered([]);
+        console.log("Nenhuma presença válida encontrada.");
+      }
+    } catch (error) {
+      console.error("Erro ao buscar presenças:", error);
       setPresencesRegistered([]);
       setEventIdsFromPresencesRegistered([]);
-      console.log("Nenhuma presença válida encontrada.");
     }
-  } catch (error) {
-    console.error("Erro ao buscar presenças:", error);
-    setPresencesRegistered([]);
-    setEventIdsFromPresencesRegistered([]);
-  }
-};
-
-  
+  };
 
   useEffect(() => {
     if (openCheckOut) {
       form.reset();
-      fetchUserPresences(); 
-    }
-    else
-    {
+      fetchUserPresences();
+    } else {
       form.reset();
     }
-  }, [openCheckOut]); 
+  }, [openCheckOut]);
 
   useEffect(() => {
     if (openCheckIn) {
       form.reset();
-      fetchUserPresencesRegistered(); 
-    }
-    else
-    {
+      fetchUserPresencesRegistered();
+    } else {
       form.reset();
     }
-  }, [openCheckIn]); 
+  }, [openCheckIn]);
 
   const form = useForm<PresenceFormSchema>({
-   resolver: zodResolver(presenceSchema),
+    resolver: zodResolver(presenceSchema),
     defaultValues: {
       event_id: "",
       status: "present",
@@ -228,85 +244,89 @@ const fetchUserPresencesRegistered = async () => {
     },
   });
 
-
   const onSubmit: SubmitHandler<PresenceFormSchema> = async (
-      data: PresenceCreate
-    ) => {
-      console.log("Enviando presença:", data);
-      const eventIdFromForm = form.getValues("event_id");
+    data: PresenceCreate,
+  ) => {
+    console.log("Enviando presença:", data);
+    const eventIdFromForm = form.getValues("event_id");
     console.log("event_id do form:", eventIdFromForm);
-   
-      const presence = presencesRegistered.find((p) => p.event_id === eventIdFromForm);
-    
-      if (!presence) {
-        console.error("Nenhuma presença encontrada com o selectedEventId:", eventIdFromForm);
-        setError('Nenhuma presença encontrada para o evento selecionado.');
-        return;
-      }
-    
-      const presenceId = presence.id;
-      console.log("Presença encontrada, ID:", presenceId);
-    
-      
-      const result = await patchPresence(presenceId, data);
-    
-      if (!result) {
-        console.log("Erro ao criar presença:", data);
-        setError('Ocorreu um erro ao cadastrar a presença');
-        return;
-      }
-      
-      console.log("Resultado:", result);
-      setSuccess('Presença Criada com sucesso!');
-    };
 
-    const onSubmitUpdate: SubmitHandler<PresenceFormSchema> = async (data: PresenceCreate) => {
-      console.log("Enviando presença:", data);
-      const eventIdFromForm = form.getValues("event_id");
+    const presence = presencesRegistered.find(
+      (p) => p.event_id === eventIdFromForm,
+    );
+
+    if (!presence) {
+      console.error(
+        "Nenhuma presença encontrada com o selectedEventId:",
+        eventIdFromForm,
+      );
+      setError("Nenhuma presença encontrada para o evento selecionado.");
+      return;
+    }
+
+    const presenceId = presence.id;
+    console.log("Presença encontrada, ID:", presenceId);
+
+    const result = await patchPresence(presenceId, data);
+
+    if (!result) {
+      console.log("Erro ao criar presença:", data);
+      setError("Ocorreu um erro ao cadastrar a presença");
+      return;
+    }
+
+    console.log("Resultado:", result);
+    setSuccess("Presença Criada com sucesso!");
+  };
+
+  const onSubmitUpdate: SubmitHandler<PresenceFormSchema> = async (
+    data: PresenceCreate,
+  ) => {
+    console.log("Enviando presença:", data);
+    const eventIdFromForm = form.getValues("event_id");
     console.log("event_id do form:", eventIdFromForm);
-   
-      const presence = presences.find((p) => p.event_id === eventIdFromForm);
-    
-      if (!presence) {
-        console.error("Nenhuma presença encontrada com o selectedEventId:", eventIdFromForm);
-        setError('Nenhuma presença encontrada para o evento selecionado.');
-        return;
-      }
-    
 
-      const presenceId = presence.id;
-      console.log("Presença encontrada, ID:", presenceId);
-    
-  
-      const result = await patchPresence(presenceId, data);
-    
-      if (!result) {
-        console.log("Erro ao atualizar presença:", data);
-        setError('Ocorreu um erro ao cadastrar a presença');
-        return;
-      }
-      
-      console.log("Resultado:", result);
-      setSuccess('Presença Atualizada com sucesso!');
-    };
+    const presence = presences.find((p) => p.event_id === eventIdFromForm);
 
-    useEffect(() => {
-      if (error) {
-        setTimeout(() => {
-          setError(null);
-        }, 10000);
-      }
-    }, [error]);
-  
-    useEffect(() => {
-      if (success) {
-        setTimeout(() => {
-          setSuccess(null);
-        }, 10000);
-      }
-    }, [success]);
-  
-  
+    if (!presence) {
+      console.error(
+        "Nenhuma presença encontrada com o selectedEventId:",
+        eventIdFromForm,
+      );
+      setError("Nenhuma presença encontrada para o evento selecionado.");
+      return;
+    }
+
+    const presenceId = presence.id;
+    console.log("Presença encontrada, ID:", presenceId);
+
+    const result = await patchPresence(presenceId, data);
+
+    if (!result) {
+      console.log("Erro ao atualizar presença:", data);
+      setError("Ocorreu um erro ao cadastrar a presença");
+      return;
+    }
+
+    console.log("Resultado:", result);
+    setSuccess("Presença Atualizada com sucesso!");
+  };
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError(null);
+      }, 10000);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        setSuccess(null);
+      }, 10000);
+    }
+  }, [success]);
 
   useEffect(() => {
     fetchEvents(pagination);
@@ -335,21 +355,21 @@ const fetchUserPresencesRegistered = async () => {
 
   const handleFilterClick = (status: string) => {
     setActiveFilter(status);
-    table.getColumn('status')?.setFilterValue(status);
+    table.getColumn("status")?.setFilterValue(status);
   };
 
-  const registeredEvents = data.filter(event =>
-    eventIdsFromPresencesRegistered.includes(event.id)
+  const registeredEvents = data.filter((event) =>
+    eventIdsFromPresencesRegistered.includes(event.id),
   );
 
-  const presentEvents = data.filter(event =>
-    eventIdsFromPresences.includes(event.id)
+  const presentEvents = data.filter((event) =>
+    eventIdsFromPresences.includes(event.id),
   );
 
   return (
     <div>
       <div>
-      <Toaster />
+        <Toaster />
       </div>
       <SearchBar
         placeholder="Pesquisar eventos"
@@ -361,18 +381,18 @@ const fetchUserPresencesRegistered = async () => {
             variant="outline"
             size="sm"
             className={`border rounded-xl ${
-              activeFilter === '' && 'bg-neutral-300'
+              activeFilter === "" && "bg-neutral-300"
             }`}
-            onClick={() => handleFilterClick('')}
+            onClick={() => handleFilterClick("")}
           >
             Todos
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleFilterClick('upcoming')}
+            onClick={() => handleFilterClick("upcoming")}
             className={`border rounded-xl ${
-              activeFilter === 'upcoming' && 'bg-neutral-300'
+              activeFilter === "upcoming" && "bg-neutral-300"
             }`}
           >
             Próximo
@@ -380,9 +400,9 @@ const fetchUserPresencesRegistered = async () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleFilterClick('started')}
+            onClick={() => handleFilterClick("started")}
             className={`border rounded-xl ${
-              activeFilter === 'started' && 'bg-neutral-300'
+              activeFilter === "started" && "bg-neutral-300"
             }`}
           >
             Em andamento
@@ -390,103 +410,100 @@ const fetchUserPresencesRegistered = async () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleFilterClick('ended')}
+            onClick={() => handleFilterClick("ended")}
             className={`border rounded-xl ${
-              activeFilter === 'ended' && 'bg-neutral-300'
+              activeFilter === "ended" && "bg-neutral-300"
             }`}
           >
             Encerrado
           </Button>
         </div>
 
-        
-
         <div className="flex space-x-4">
+          <Dialog.Root open={openCheckOut} onOpenChange={setOpenCheckOut}>
+            <Dialog.Trigger asChild>
+              <Button
+                type="button"
+                variant="outline"
+                className="rounded-xl bg-red-600 text-white"
+              >
+                Faça o seu Check-Out
+              </Button>
+            </Dialog.Trigger>
 
-        <Dialog.Root open={openCheckOut} onOpenChange={setOpenCheckOut}>
- 
-  <Dialog.Trigger asChild>
-    <Button
-      type="button"
-      variant="outline"
-      className="rounded-xl bg-red-600 text-white"
-    >
-      Faça o seu Check-Out
-    </Button>
-  </Dialog.Trigger>
+            <Dialog.Portal>
+              <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" />
+              <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg z-50">
+                <Dialog.Title className="text-xl font-bold">
+                  Check-Out
+                </Dialog.Title>
+                <Dialog.Description className="text-gray-600">
+                  Insira seus dados para confirmar o check-out.
+                </Dialog.Description>
 
-  
-  <Dialog.Portal>
-    <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" />
-    <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg z-50">
-      <Dialog.Title className="text-xl font-bold">Check-Out</Dialog.Title>
-      <Dialog.Description className="text-gray-600">
-        Insira seus dados para confirmar o check-out.
-      </Dialog.Description>
+                {success && (
+                  <div className="bg-green-100 text-green-700 p-3 rounded-md mb-3">
+                    {success}
+                  </div>
+                )}
 
-     
-      {success && (
-        <div className="bg-green-100 text-green-700 p-3 rounded-md mb-3">
-          {success}
-        </div>
-      )}
+                <CheckOutForm
+                  form={form}
+                  onSubmit={onSubmitUpdate}
+                  events={presentEvents}
+                  presences={presences}
+                />
 
-<CheckOutForm 
-  form={form} 
-  onSubmit={onSubmitUpdate} 
-  events={presentEvents}
-  presences={presences}
-/>
+                <Dialog.Close asChild>
+                  <button className="absolute top-2 right-2 text-gray-600">
+                    ✖
+                  </button>
+                </Dialog.Close>
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
 
+          <Dialog.Root open={openCheckIn} onOpenChange={setOpenCheckIn}>
+            <Dialog.Trigger asChild>
+              <Button
+                type="button"
+                variant="outline"
+                className="rounded-xl bg-sky-800 text-white"
+              >
+                Faça o seu Check-In
+              </Button>
+            </Dialog.Trigger>
 
-      <Dialog.Close asChild>
-        <button className="absolute top-2 right-2 text-gray-600">✖</button>
-      </Dialog.Close>
-    </Dialog.Content>
-  </Dialog.Portal>
-</Dialog.Root>
+            <Dialog.Portal>
+              <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" />
+              <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg z-50">
+                <Dialog.Title className="text-xl font-bold">
+                  Check-In
+                </Dialog.Title>
+                <Dialog.Description className="text-gray-600">
+                  Insira seus dados para confirmar o check-in.
+                </Dialog.Description>
 
-        <Dialog.Root open={openCheckIn} onOpenChange={setOpenCheckIn}>
-        
-          <Dialog.Trigger asChild>
-            <Button
-              type="button"
-              variant="outline"
-              className="rounded-xl bg-sky-800 text-white"
-            >
-              Faça o seu Check-In
-            </Button>
-          </Dialog.Trigger>
+                {success && (
+                  <div className="bg-green-100 text-green-700 p-3 rounded-md mb-3">
+                    {success}
+                  </div>
+                )}
 
-       
-          <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" />
-          <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg z-50">
-              <Dialog.Title className="text-xl font-bold">Check-In</Dialog.Title>
-              <Dialog.Description className="text-gray-600">
-                Insira seus dados para confirmar o check-in.
-              </Dialog.Description>
+                <CheckInForm
+                  form={form}
+                  onSubmit={onSubmit}
+                  events={registeredEvents}
+                />
 
-              {success && (
-        <div className="bg-green-100 text-green-700 p-3 rounded-md mb-3">
-          {success}
-        </div>
-      )}
-
-         
-            <CheckInForm form={form} onSubmit={onSubmit} events={registeredEvents} />
-              
-              
-
-           
-              <Dialog.Close asChild>
-                <button className="absolute top-2 right-2 text-gray-600">
-                  ✖
-                </button>
-              </Dialog.Close>
-            </Dialog.Content>
-          </Dialog.Portal>
-        </Dialog.Root>
+                <Dialog.Close asChild>
+                  <button className="absolute top-2 right-2 text-gray-600">
+                    ✖
+                  </button>
+                </Dialog.Close>
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
 
           <Button
             type="button"

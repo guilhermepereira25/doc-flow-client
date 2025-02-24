@@ -1,16 +1,16 @@
-import { Button } from '@/components/ui/button';
-import { Form, FormField } from '@/components/ui/form';
-import FormItemField from '@/components/FormItemField';
+import { Button } from "@/components/ui/button";
+import { Form, FormField } from "@/components/ui/form";
+import FormItemField from "@/components/FormItemField";
 import {
   changePassowrdSchema,
   ChangePassword as ChangePasswordType,
-} from '@/lib/schemas/auth/change-password.schema';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import ConfirmPassword from '@/components/ConfirmPassword';
-import { changePassword } from '@/api/data/auth.data';
-import { toast } from 'sonner';
-import { useNavigate } from 'react-router';
+} from "@/lib/schemas/auth/change-password.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import ConfirmPassword from "@/components/ConfirmPassword";
+import { changePassword } from "@/api/data/auth.data";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 export default function ChangePasswordForm() {
   const navigate = useNavigate();
@@ -18,36 +18,36 @@ export default function ChangePasswordForm() {
   const form = useForm<ChangePasswordType>({
     resolver: zodResolver(changePassowrdSchema),
     defaultValues: {
-      oldPassword: '',
-      newPassword: '',
+      oldPassword: "",
+      newPassword: "",
     },
   });
 
   const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value !== form.getValues('newPassword')) {
-      form.setError('newPassword', {
-        type: 'manual',
-        message: 'As senhas não coincidem',
+    if (e.target.value !== form.getValues("newPassword")) {
+      form.setError("newPassword", {
+        type: "manual",
+        message: "As senhas não coincidem",
       });
       return;
     }
-    form.clearErrors('newPassword');
+    form.clearErrors("newPassword");
   };
 
   const handleFormSubmit: SubmitHandler<ChangePasswordType> = async (
-    data: ChangePasswordType
+    data: ChangePasswordType,
   ) => {
     const result = await changePassword({ ...data });
     if (result) {
       toast.error(
-        'Ocorreu um erro ao alterar a senha, por favor tente novamente'
+        "Ocorreu um erro ao alterar a senha, por favor tente novamente",
       );
       form.reset();
       return;
     }
 
-    toast.success('Senha alterada com sucesso');
-    navigate('/profile');
+    toast.success("Senha alterada com sucesso");
+    navigate("/profile");
   };
 
   return (

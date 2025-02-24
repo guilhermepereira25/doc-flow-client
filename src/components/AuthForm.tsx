@@ -1,10 +1,10 @@
-import { Form, FormField } from '@/components/ui/form';
-import { Button } from './ui/button';
-import { AuthFormSchema } from '@/lib/types';
-import type { useForm } from 'react-hook-form';
-import FormItemField from './FormItemField';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+import { Form, FormField } from "@/components/ui/form";
+import { Button } from "./ui/button";
+import { AuthFormSchema } from "@/lib/types";
+import type { useForm } from "react-hook-form";
+import FormItemField from "./FormItemField";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 
 interface AuthFormProps {
   form: ReturnType<typeof useForm<AuthFormSchema>>;
@@ -16,7 +16,7 @@ export default function AuthForm({ form, onSubmit }: AuthFormProps) {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname === '/signup') {
+    if (location.pathname === "/signup") {
       setIsRegister(true);
       return;
     }
@@ -56,7 +56,7 @@ export default function AuthForm({ form, onSubmit }: AuthFormProps) {
           className="w-full bg-sky-900 text-white hover:bg-sky-700 rounded-2xl"
           type="submit"
         >
-          {isRegister ? 'Cadastrar' : 'Entrar'}
+          {isRegister ? "Cadastrar" : "Entrar"}
         </Button>
       </form>
     </Form>

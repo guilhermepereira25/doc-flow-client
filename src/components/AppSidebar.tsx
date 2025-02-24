@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import * as React from 'react';
+import * as React from "react";
 
-import { NavUser } from './NavUser';
+import { NavUser } from "./NavUser";
 import {
   Sidebar,
   SidebarContent,
@@ -11,18 +11,18 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarRail,
-} from '@/components/ui/sidebar';
-import NavMenuItem from './NavMenuItem';
-import { useLocation, useNavigate } from 'react-router';
-import useAuth from '@/hooks/useAuth';
-import { menuRoutes } from '@/lib/utils';
-import { Button } from './ui/button';
-import useProfile from '@/hooks/useProfile';
+} from "@/components/ui/sidebar";
+import NavMenuItem from "./NavMenuItem";
+import { useLocation, useNavigate } from "react-router";
+import useAuth from "@/hooks/useAuth";
+import { menuRoutes } from "@/lib/utils";
+import { Button } from "./ui/button";
+import useProfile from "@/hooks/useProfile";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [activeNavItem, setActiveNavItem] = React.useState<string>('');
+  const [activeNavItem, setActiveNavItem] = React.useState<string>("");
   const { user, logout } = useAuth();
   const { isUserAdminOrProfessor } = useProfile();
 
@@ -41,8 +41,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader className="flex items-center justify-between p-4">
         <NavUser
           user={{
-            email: user?.email || 'Email não encontrado',
-            name: user?.fullName || 'Nome não encontrado',
+            email: user?.email || "Email não encontrado",
+            name: user?.fullName || "Nome não encontrado",
             avatar: `/avatars/${user?.fullName.charAt(0).toLowerCase()}.png`,
           }}
         />
@@ -54,39 +54,39 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <NavMenuItem
                 text="Criar Evento"
                 onClick={() =>
-                  navigate('/events', {
-                    state: { from: { pathname: '/events' } },
+                  navigate("/events", {
+                    state: { from: { pathname: "/events" } },
                   })
                 }
-                activeNavItem={activeNavItem === '/events'}
+                activeNavItem={activeNavItem === "/events"}
               />
             )}
             <NavMenuItem
               text="Todos eventos"
               onClick={() =>
-                navigate('/events/all', {
-                  state: { from: { pathname: '/events/all' } },
+                navigate("/events/all", {
+                  state: { from: { pathname: "/events/all" } },
                 })
               }
-              activeNavItem={activeNavItem === '/events/all'}
+              activeNavItem={activeNavItem === "/events/all"}
             />
             <NavMenuItem
               text="Seus arquivos"
               onClick={() =>
-                navigate('/files', {
-                  state: { from: { pathname: '/files' } },
+                navigate("/files", {
+                  state: { from: { pathname: "/files" } },
                 })
               }
-              activeNavItem={activeNavItem === '/files'}
+              activeNavItem={activeNavItem === "/files"}
             />
             <NavMenuItem
               text="Perfil"
               onClick={() =>
-                navigate('/profile', {
-                  state: { from: { pathname: '/profile' } },
+                navigate("/profile", {
+                  state: { from: { pathname: "/profile" } },
                 })
               }
-              activeNavItem={activeNavItem === '/profile'}
+              activeNavItem={activeNavItem === "/profile"}
             />
           </SidebarMenu>
         </SidebarGroup>

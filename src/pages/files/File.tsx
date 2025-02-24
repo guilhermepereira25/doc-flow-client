@@ -1,5 +1,5 @@
-import { ViewFilesTable } from '@/components/files/ViewFilesTable';
-import PageHeader from '@/components/PageHeader';
+import { ViewFilesTable } from "@/components/files/ViewFilesTable";
+import PageHeader from "@/components/PageHeader";
 
 export default function File() {
   return (

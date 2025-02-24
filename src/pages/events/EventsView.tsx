@@ -1,5 +1,5 @@
-import { ViewEventsDataTable } from '@/components/events/ViewEventsTable';
-import PageHeader from '@/components/PageHeader';
+import { ViewEventsDataTable } from "@/components/events/ViewEventsTable";
+import PageHeader from "@/components/PageHeader";
 
 export default function EventsView() {
   return (

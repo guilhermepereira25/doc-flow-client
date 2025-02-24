@@ -1,13 +1,13 @@
-import { Form, FormField } from '@/components/ui/form';
-import { Button } from './ui/button';
-import { SignupFormSchema } from '@/lib/types';
-import type { useForm } from 'react-hook-form';
-import FormItemField from './FormItemField';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
-import { Label } from './ui/label';
-import { getProfileId } from '../api/data/profile.data';
-import ConfirmPassword from './ConfirmPassword';
+import { Form, FormField } from "@/components/ui/form";
+import { Button } from "./ui/button";
+import { SignupFormSchema } from "@/lib/types";
+import type { useForm } from "react-hook-form";
+import FormItemField from "./FormItemField";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
+import { Label } from "./ui/label";
+import { getProfileId } from "../api/data/profile.data";
+import ConfirmPassword from "./ConfirmPassword";
 
 interface AuthFormProps {
   form: ReturnType<typeof useForm<SignupFormSchema>>;
@@ -18,18 +18,18 @@ export default function SignupAuthForm({ form, onSubmit }: AuthFormProps) {
   const [isRegister, setIsRegister] = useState(false);
   const location = useLocation();
 
-  const [role, setRole] = useState<string>('');
-  const [profileId, setProfileId] = useState<string>('');
+  const [role, setRole] = useState<string>("");
+  const [profileId, setProfileId] = useState<string>("");
 
   const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value !== form.getValues('password')) {
-      form.setError('password', {
-        type: 'manual',
-        message: 'As senhas não coincidem',
+    if (e.target.value !== form.getValues("password")) {
+      form.setError("password", {
+        type: "manual",
+        message: "As senhas não coincidem",
       });
       return;
     }
-    form.clearErrors('password');
+    form.clearErrors("password");
   };
 
   useEffect(() => {
@@ -37,14 +37,14 @@ export default function SignupAuthForm({ form, onSubmit }: AuthFormProps) {
       getProfileId(role, { limit: 10, offset: 0 }).then((id) => {
         if (id) {
           setProfileId(id);
-          form.setValue('profileId', id);
+          form.setValue("profileId", id);
         }
       });
     }
   }, [role]);
 
   useEffect(() => {
-    if (location.pathname === '/signup') {
+    if (location.pathname === "/signup") {
       setIsRegister(true);
       return;
     }
@@ -101,7 +101,7 @@ export default function SignupAuthForm({ form, onSubmit }: AuthFormProps) {
             value={role}
             onChange={(e) => {
               setRole(e.target.value);
-              setProfileId('');
+              setProfileId("");
             }}
           >
             <option value="">Selecione...</option>
@@ -158,7 +158,7 @@ export default function SignupAuthForm({ form, onSubmit }: AuthFormProps) {
           className="w-full bg-sky-900 text-white hover:bg-sky-700 rounded-2xl"
           type="submit"
         >
-          {isRegister ? 'Cadastrar' : 'Entrar'}
+          {isRegister ? "Cadastrar" : "Entrar"}
         </Button>
       </form>
     </Form>

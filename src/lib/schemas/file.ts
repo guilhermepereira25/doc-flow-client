@@ -1,3 +1,3 @@
 import { components } from "../schema";
 
-export type File = components['schemas']['File'];
+export type File = components["schemas"]["File"];

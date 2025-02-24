@@ -1,4 +1,4 @@
-import { flexRender, type Table as TanstackTable } from '@tanstack/react-table';
+import { flexRender, type Table as TanstackTable } from "@tanstack/react-table";
 import {
   Table,
   TableHeader,
@@ -6,8 +6,8 @@ import {
   TableHead,
   TableBody,
   TableCell,
-} from './ui/table';
-import DataTablePagination from './DataTablePagination';
+} from "./ui/table";
+import DataTablePagination from "./DataTablePagination";
 
 interface DataTableProps<TData> {
   table: TanstackTable<TData>;
@@ -27,7 +27,7 @@ export default function DataTable<TData>({ table }: DataTableProps<TData>) {
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 );
@@ -41,7 +41,7 @@ export default function DataTable<TData>({ table }: DataTableProps<TData>) {
               <TableRow
                 key={row.id}
                 className="hover:bg-sky-50"
-                data-state={row.getIsSelected() && 'selected'}
+                data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>

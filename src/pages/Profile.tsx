@@ -1,9 +1,9 @@
-import PageHeader from '@/components/PageHeader';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/SquareAvatar';
-import { Button } from '@/components/ui/button';
-import UserEditDialog from '@/components/user/UserEditDialog';
-import useAuth from '@/hooks/useAuth';
-import { Link, useNavigate } from 'react-router';
+import PageHeader from "@/components/PageHeader";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/SquareAvatar";
+import { Button } from "@/components/ui/button";
+import UserEditDialog from "@/components/user/UserEditDialog";
+import useAuth from "@/hooks/useAuth";
+import { Link, useNavigate } from "react-router";
 
 export default function Profile() {
   const { user } = useAuth();
@@ -21,7 +21,7 @@ export default function Profile() {
             <div className="p-6 flex items-center">
               <Avatar className="box-border size-32 bg-sky-900 border rounded-xl">
                 <AvatarImage
-                  src={user?.fullName.charAt(0).toLowerCase() || ''}
+                  src={user?.fullName.charAt(0).toLowerCase() || ""}
                   alt={user?.fullName}
                 />
                 <AvatarFallback className="text-2xl">
@@ -37,7 +37,7 @@ export default function Profile() {
             <Button
               variant="link"
               className="mr-2 bg-white border border-neutral-400 rounded-lg w-52"
-              onClick={() => navigate('/user/changePassword')}
+              onClick={() => navigate("/user/changePassword")}
             >
               Trocar senha
             </Button>
@@ -46,7 +46,7 @@ export default function Profile() {
               variant="link"
               className="mr-2 bg-white border border-neutral-400 rounded-lg w-52"
             >
-              <Link to={'/events'}>Seus Eventos</Link>
+              <Link to={"/events"}>Seus Eventos</Link>
             </Button>
             <Button
               variant="link"

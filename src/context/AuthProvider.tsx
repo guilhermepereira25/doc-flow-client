@@ -1,16 +1,16 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { useState, ReactNode, useEffect, useCallback } from 'react';
-import { createContext } from 'react';
+import React, { useState, ReactNode, useEffect, useCallback } from "react";
+import { createContext } from "react";
 import {
   UserPayload,
   userPayloadSchema,
   type AuthContextType,
-} from '@/lib/types';
-import { useLocation, useNavigate } from 'react-router';
-import LoadingOverlay from '@/components/LoadingOverlay';
+} from "@/lib/types";
+import { useLocation, useNavigate } from "react-router";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
@@ -26,11 +26,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const logout = useCallback(() => {
     localStorage.clear();
     setIsAuthenticated(false);
-    navigate('/login', { replace: true });
+    navigate("/login", { replace: true });
   }, [navigate]);
 
   const decodeAndReturnPayload = useCallback((token: string) => {
-    const payload = token.split('.')[1];
+    const payload = token.split(".")[1];
     //see: https://stackoverflow.com/questions/68849233/convert-a-string-to-base64-in-javascript-btoa-and-atob-are-deprecated
     const decodedPayload = atob(payload);
     return JSON.parse(decodedPayload);
@@ -43,7 +43,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const expirateDate = payload.exp * 1000;
       return expirateDate < Date.now();
     },
-    [decodeAndReturnPayload]
+    [decodeAndReturnPayload],
   );
 
   const loadUser = useCallback(
@@ -53,11 +53,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const userPayload = userPayloadSchema.parse(payload);
       setUser(userPayload);
     },
-    [decodeAndReturnPayload]
+    [decodeAndReturnPayload],
   );
 
   const checkAuthentication = useCallback(async () => {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
       setIsLoading(false);
       return;
@@ -84,24 +84,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     checkAuthentication();
     if (isLoading) return;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
 
   useEffect(() => {
     if (isLoading) return;
     if (
       isAuthenticated &&
-      (location.pathname === '/login' || location.pathname === '/signup')
+      (location.pathname === "/login" || location.pathname === "/signup")
     ) {
-      const navigateFromTo = location.state?.from?.pathname || '/';
-      navigate(navigateFromTo, { state: { from: 'refresh' } });
+      const navigateFromTo = location.state?.from?.pathname || "/";
+      navigate(navigateFromTo, { state: { from: "refresh" } });
     }
 
     if (!isAuthenticated) {
-      if (location.pathname === '/login' || location.pathname === '/signup') {
+      if (location.pathname === "/login" || location.pathname === "/signup") {
         return;
       }
-      navigate('/login', { replace: true });
+      navigate("/login", { replace: true });
     }
   }, [isAuthenticated, location, navigate, isLoading]);
 

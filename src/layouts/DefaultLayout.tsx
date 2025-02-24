@@ -1,9 +1,9 @@
-import { AppSidebar } from '@/components/AppSidebar';
-import { MobileMenu } from '@/components/MobileMenu';
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Outlet } from 'react-router';
-import { Toaster } from '../components/ui/sonner';
+import { AppSidebar } from "@/components/AppSidebar";
+import { MobileMenu } from "@/components/MobileMenu";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Outlet } from "react-router";
+import { Toaster } from "../components/ui/sonner";
 
 export default function DefaultLayout() {
   const isMobile = useIsMobile();

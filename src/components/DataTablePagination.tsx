@@ -1,5 +1,5 @@
-import { Table } from '@tanstack/react-table';
-import { Button } from './ui/button';
+import { Table } from "@tanstack/react-table";
+import { Button } from "./ui/button";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;

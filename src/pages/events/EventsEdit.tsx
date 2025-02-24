@@ -1,12 +1,12 @@
-import { getEvent } from '@/api/data/events.data';
-import { EventCreateSchema, Event, createEventSchema } from '@/lib/types';
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import EventsForm from '@/components/events/EventsForm';
-import PageHeader from '@/components/PageHeader';
-import { patch } from '@/api/data/events.data';
+import { getEvent } from "@/api/data/events.data";
+import { EventCreateSchema, Event, createEventSchema } from "@/lib/types";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import EventsForm from "@/components/events/EventsForm";
+import PageHeader from "@/components/PageHeader";
+import { patch } from "@/api/data/events.data";
 
 export default function EventsEdit() {
   const [event, setEvent] = useState<Event | null>(null);
@@ -33,25 +33,25 @@ export default function EventsEdit() {
   });
 
   useEffect(() => {
-    const id = location.pathname.split('/')[2];
+    const id = location.pathname.split("/")[2];
     if (!id) {
-      navigate('/events');
+      navigate("/events");
     }
     fetchEvent(id);
   }, [location.pathname, navigate]);
 
   const handleSubmit = async (
-    data: Omit<EventCreateSchema, 'eventStartTime' | 'eventEndTime'>
+    data: Omit<EventCreateSchema, "eventStartTime" | "eventEndTime">,
   ) => {
     if (!event) {
       return;
     }
     const result = await patch(event?.id, data);
     if (result !== undefined) {
-      navigate('/events', {
+      navigate("/events", {
         state: {
-          action: 'update',
-          message: 'Evento atualizado com sucesso',
+          action: "update",
+          message: "Evento atualizado com sucesso",
         },
       });
     }

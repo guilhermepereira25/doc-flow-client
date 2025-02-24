@@ -1,6 +1,6 @@
-import { Navigate, Outlet } from 'react-router';
-import useProfile from '@/hooks/useProfile';
-import { type ProfileEnum } from '@/lib/schemas/profile.schema';
+import { Navigate, Outlet } from "react-router";
+import useProfile from "@/hooks/useProfile";
+import { type ProfileEnum } from "@/lib/schemas/profile.schema";
 
 interface ProfileRouteProps {
   profile: ProfileEnum[];

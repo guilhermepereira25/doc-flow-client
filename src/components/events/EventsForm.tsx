@@ -4,18 +4,18 @@ import {
   FormField,
   FormItem,
   FormLabel,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 import {
   Select,
   SelectTrigger,
   SelectContent,
   SelectValue,
   SelectItem,
-} from '@/components/ui/select';
-import { EventCreateSchema, Event } from '@/lib/schemas/event.schema';
-import FormItemField from '../FormItemField';
-import { UseFormReturn } from 'react-hook-form';
-import { Button } from '../ui/button';
+} from "@/components/ui/select";
+import { EventCreateSchema, Event } from "@/lib/schemas/event.schema";
+import FormItemField from "../FormItemField";
+import { UseFormReturn } from "react-hook-form";
+import { Button } from "../ui/button";
 
 interface EventsFormProps {
   form: UseFormReturn<EventCreateSchema>;
@@ -37,7 +37,7 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
                 <FormField
                   control={form.control}
                   name="name"
-                  defaultValue={event ? event.name : ''}
+                  defaultValue={event ? event.name : ""}
                   render={({ field }) => (
                     <FormItemField
                       field={field}
@@ -53,14 +53,14 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
                 <FormField
                   control={form.control}
                   name="status"
-                  defaultValue={event ? event.status : 'upcoming'}
+                  defaultValue={event ? event.status : "upcoming"}
                   render={({ field }) => {
                     return (
                       <FormItem>
                         <FormLabel>Status</FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={event ? event.status : 'upcoming'}
+                          defaultValue={event ? event.status : "upcoming"}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -89,7 +89,7 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
                 <FormField
                   control={form.control}
                   name="eventStartDate"
-                  defaultValue={event ? event.start_at.split('T')[0] : ''}
+                  defaultValue={event ? event.start_at.split("T")[0] : ""}
                   render={({ field }) => (
                     <FormItemField
                       field={{
@@ -107,7 +107,7 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
                 <FormField
                   control={form.control}
                   name="eventEndDate"
-                  defaultValue={event ? event.end_at.split('T')[0] : ''}
+                  defaultValue={event ? event.end_at.split("T")[0] : ""}
                   render={({ field }) => (
                     <FormItemField
                       field={field}
@@ -127,7 +127,7 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
                   control={form.control}
                   name="eventStartTime"
                   defaultValue={
-                    event ? event.start_at.split('T')[1].slice(0, 5) : ''
+                    event ? event.start_at.split("T")[1].slice(0, 5) : ""
                   }
                   render={({ field }) => (
                     <FormItemField
@@ -145,7 +145,7 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
                   control={form.control}
                   name="eventEndTime"
                   defaultValue={
-                    event ? event.end_at.split('T')[1].slice(0, 5) : ''
+                    event ? event.end_at.split("T")[1].slice(0, 5) : ""
                   }
                   render={({ field }) => (
                     <FormItemField

@@ -3,10 +3,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { cn } from '@/lib/utils';
-import { Input } from './ui/input';
-import { ControllerRenderProps } from 'react-hook-form';
+} from "@/components/ui/form";
+import { cn } from "@/lib/utils";
+import { Input } from "./ui/input";
+import { ControllerRenderProps } from "react-hook-form";
 
 interface FormFieldProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,8 +30,8 @@ export default function FormItemField({
       <FormControl>
         <Input
           className={cn(
-            'rounded-2xl bg-white bg-opacity-60',
-            error && 'border-destructive'
+            "rounded-2xl bg-white bg-opacity-60",
+            error && "border-destructive",
           )}
           type={type}
           placeholder={placeholder}

@@ -1,5 +1,12 @@
 import React from "react";
-import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  Image,
+  StyleSheet,
+} from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
   page: {
@@ -80,12 +87,15 @@ export const CertificatePDF = ({
         <Image style={styles.headerImage} src="/images/header_sepex.png" />
         <View style={styles.contentContainer}>
           <View style={styles.textContainer}>
-          <Text style={[styles.text, { textAlign: "justify" }]}>
-            O Centro Federal de Educação Tecnológica Celso Suckow da Fonseca certifica que {nome} apresentou a
-            Atividade {atividade}, com duração de {horas} horas, durante a realização da Semana de Ensino,
-            Pesquisa e Extensão 2024 – “Biomas do Brasil: diversidade, saberes e tecnologias sociais” evento anual
-            promovido pelo Departamento de Extensão e Assuntos Comunitário – DEAC, no período de {dataInicio} a {dataFim}.
-        </Text>
+            <Text style={[styles.text, { textAlign: "justify" }]}>
+              O Centro Federal de Educação Tecnológica Celso Suckow da Fonseca
+              certifica que {nome} apresentou a Atividade {atividade}, com
+              duração de {horas} horas, durante a realização da Semana de
+              Ensino, Pesquisa e Extensão 2024 – “Biomas do Brasil: diversidade,
+              saberes e tecnologias sociais” evento anual promovido pelo
+              Departamento de Extensão e Assuntos Comunitário – DEAC, no período
+              de {dataInicio} a {dataFim}.
+            </Text>
           </View>
           <View style={styles.dateContainer}>
             <Text style={styles.dateText}>
@@ -93,8 +103,14 @@ export const CertificatePDF = ({
             </Text>
           </View>
           <View style={styles.signatures}>
-            <Image style={styles.signatureImage} src="/images/assinatura_maria_flow.png" />
-            <Image style={styles.signatureImage} src="/images/assinatura_renata_flow.png" />
+            <Image
+              style={styles.signatureImage}
+              src="/images/assinatura_maria_flow.png"
+            />
+            <Image
+              style={styles.signatureImage}
+              src="/images/assinatura_renata_flow.png"
+            />
           </View>
         </View>
         <Image style={styles.footerImage} src="/images/final_text_sepex.png" />

@@ -1,5 +1,5 @@
-import { AxiosInstance } from 'axios';
-import { axiosInstance, privateAxiosInstance } from '../axios-instance';
+import { AxiosInstance } from "axios";
+import { axiosInstance, privateAxiosInstance } from "../axios-instance";
 
 export default class ApiService {
   private axiosInstance: AxiosInstance;

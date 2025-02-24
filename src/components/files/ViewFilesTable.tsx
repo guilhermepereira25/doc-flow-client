@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   getCoreRowModel,
@@ -7,18 +7,23 @@ import {
   SortingState,
   useReactTable,
   VisibilityState,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
 
-import { Button } from '../ui/button';
-import { useEffect, useMemo, useState } from 'react';
-import SearchBar from '../SearchBar';
-import DataTable from '../DataTable';
-import { getColumns } from './ViewFileTableColumns';
-import { File } from '@/lib/schemas/file';
-import { getFilesByUser } from '@/api/data/file.data';
-import { Pagination as PaginationArgs } from '@/lib/types';
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '../ui/dropdown-menu';
-import { Filter } from 'lucide-react';
+import { Button } from "../ui/button";
+import { useEffect, useMemo, useState } from "react";
+import SearchBar from "../SearchBar";
+import DataTable from "../DataTable";
+import { getColumns } from "./ViewFileTableColumns";
+import { File } from "@/lib/schemas/file";
+import { getFilesByUser } from "@/api/data/file.data";
+import { Pagination as PaginationArgs } from "@/lib/types";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Filter } from "lucide-react";
 
 interface Pagination {
   pageIndex: number;
@@ -72,13 +77,19 @@ export function ViewFilesTable() {
     pageCount: Math.ceil(data.length / pagination.pageSize),
   });
 
-  const handleSorting = (target: 'creator' | 'time' | '') => {
+  const handleSorting = (target: "creator" | "time" | "") => {
     switch (target) {
-      case 'creator':
-        table.getColumn('user')?.toggleSorting(table.getColumn('user')?.getIsSorted() === 'asc');
+      case "creator":
+        table
+          .getColumn("user")
+          ?.toggleSorting(table.getColumn("user")?.getIsSorted() === "asc");
         break;
-      case 'time':
-        table.getColumn('created_at')?.toggleSorting(table.getColumn('created_at')?.getIsSorted() === 'asc');
+      case "time":
+        table
+          .getColumn("created_at")
+          ?.toggleSorting(
+            table.getColumn("created_at")?.getIsSorted() === "asc",
+          );
         break;
       default:
         setSorting([]);
@@ -87,7 +98,7 @@ export function ViewFilesTable() {
   };
 
   return (
-    <div className='space-y-4'>
+    <div className="space-y-4">
       <SearchBar
         placeholder="Pesquisar eventos"
         onChange={(e) => table.setGlobalFilter(e.target.value)}
@@ -98,18 +109,18 @@ export function ViewFilesTable() {
             variant="outline"
             size="sm"
             className={`border rounded-xl ${
-              sorting.length === 0 && 'bg-neutral-300'
+              sorting.length === 0 && "bg-neutral-300"
             }`}
-            onClick={() => handleSorting('')}
+            onClick={() => handleSorting("")}
           >
             Todos
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleSorting('creator')}
+            onClick={() => handleSorting("creator")}
             className={`border rounded-xl ${
-              table.getColumn('user')?.getIsSorted() && 'bg-neutral-300'
+              table.getColumn("user")?.getIsSorted() && "bg-neutral-300"
             }`}
           >
             Responsável
@@ -117,9 +128,9 @@ export function ViewFilesTable() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleSorting('time')}
+            onClick={() => handleSorting("time")}
             className={`border rounded-xl ${
-              table.getColumn('created_at')?.getIsSorted() && 'bg-neutral-300'
+              table.getColumn("created_at")?.getIsSorted() && "bg-neutral-300"
             }`}
           >
             Por tempo de criação
@@ -129,28 +140,33 @@ export function ViewFilesTable() {
         <div>
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <Button variant={'outline'} size={'lg'} className='rounded-2xl bg-neutral-100 text-sky-700'>
-                <Filter /> 
+              <Button
+                variant={"outline"}
+                size={"lg"}
+                className="rounded-2xl bg-neutral-100 text-sky-700"
+              >
+                <Filter />
                 Filtrar
-                </Button>
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              {
-                table.getAllColumns()
+              {table
+                .getAllColumns()
                 .filter((column) => column.getCanHide())
-                .map((column ) => {
+                .map((column) => {
                   return (
                     <DropdownMenuCheckboxItem
                       key={column.id}
-                      className='capitalize'
+                      className="capitalize"
                       checked={column.getIsVisible()}
-                      onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
                     >
                       {column.columnDef?.header?.toString()}
                     </DropdownMenuCheckboxItem>
                   );
-                })
-              }
+                })}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
