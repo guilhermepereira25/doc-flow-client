@@ -10,7 +10,7 @@ import useProfile from "@/hooks/useProfile";
 
 export function MobileMenu() {
   const [open, setOpen] = React.useState(false);
-  const { isUserAdminOrProfessor } = useProfile();
+  const { isUserProfileAdminOrProfessor } = useProfile();
 
   return (
     <header className="flex items-center justify-between px-4 py-2 bg-background border-b">
@@ -32,7 +32,7 @@ export function MobileMenu() {
                 <User className="h-5 w-5" />
                 <span>Perfil</span>
               </Link>
-              {isUserAdminOrProfessor && (
+              {isUserProfileAdminOrProfessor && (
                 <Link
                   to={`/events`}
                   className="flex items-center space-x-2 text-sm font-medium"

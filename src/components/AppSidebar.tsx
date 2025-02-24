@@ -24,7 +24,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
   const [activeNavItem, setActiveNavItem] = React.useState<string>("");
   const { user, logout } = useAuth();
-  const { isUserAdminOrProfessor } = useProfile();
+  const { isUserProfileAdminOrProfessor } = useProfile();
 
   const menuItems = React.useMemo(() => {
     return menuRoutes;

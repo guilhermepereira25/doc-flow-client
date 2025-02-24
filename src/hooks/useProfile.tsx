@@ -4,22 +4,22 @@ import { superUsersProfiles } from "@/lib/utils";
 
 const useProfile = (): {
   profile: ProfileEnum;
-  isUserAdminOrProfessor: boolean;
+  isUserProfileAdminOrProfessor: boolean;
 } => {
   const { user } = useAuth();
   if (!user) {
-    throw new Error("useProfile must be used within a AuthProvider");
+    throw new Error('useProfile must be used within a AuthProvider');
   }
 
   const profileName =
     user?.profile.name.charAt(0).toUpperCase() + user?.profile.name.slice(1);
 
-  const isUserAdminOrProfessor: boolean =
+  const isUserProfileAdminOrProfessor: boolean =
     superUsersProfiles.includes(profileName);
 
   return {
     profile: profileName as ProfileEnum,
-    isUserAdminOrProfessor,
+    isUserProfileAdminOrProfessor,
   };
 };
 
