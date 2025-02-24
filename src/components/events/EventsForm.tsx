@@ -28,7 +28,7 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-3 p-4 space-x-4 max-md:space-x-0 max-md:flex max-md:flex-col max-md:space-y-4">
+          <div className="grid grid-cols-3 p-4 gap-x-8 gap-y-4  max-md:space-x-0 max-md:flex max-md:flex-col max-md:space-y-4">
             <div className="p-4 flex flex-col space-y-3 border rounded-xl max-md:col-span-0">
               <div>
                 <span className="font-bold">Diretrizes</span>
@@ -37,7 +37,7 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
                 <FormField
                   control={form.control}
                   name="name"
-                  defaultValue={event ? event.name : ""}
+                  defaultValue={event ? event.name : ''}
                   render={({ field }) => (
                     <FormItemField
                       field={field}
@@ -53,14 +53,14 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
                 <FormField
                   control={form.control}
                   name="status"
-                  defaultValue={event ? event.status : "upcoming"}
+                  defaultValue={event ? event.status : 'upcoming'}
                   render={({ field }) => {
                     return (
                       <FormItem>
                         <FormLabel>Status</FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={event ? event.status : "upcoming"}
+                          defaultValue={event ? event.status : 'upcoming'}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -80,6 +80,22 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
                   }}
                 />
               </div>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="vacancies"
+                  defaultValue={event ? event.vacancies : 1}
+                  render={({ field }) => (
+                    <FormItemField
+                      field={{ ...field }}
+                      label="Vagas Disponíveis"
+                      error={form.formState.errors.vacancies?.message}
+                      type="number"
+                      placeholder="Quantidade vagas do evento"
+                    />
+                  )}
+                />
+              </div>
             </div>
             <div className="p-4 border rounded-xl space-y-3">
               <div>
@@ -89,7 +105,7 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
                 <FormField
                   control={form.control}
                   name="eventStartDate"
-                  defaultValue={event ? event.start_at.split("T")[0] : ""}
+                  defaultValue={event ? event.start_at.split('T')[0] : ''}
                   render={({ field }) => (
                     <FormItemField
                       field={{
@@ -107,7 +123,7 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
                 <FormField
                   control={form.control}
                   name="eventEndDate"
-                  defaultValue={event ? event.end_at.split("T")[0] : ""}
+                  defaultValue={event ? event.end_at.split('T')[0] : ''}
                   render={({ field }) => (
                     <FormItemField
                       field={field}
@@ -127,7 +143,7 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
                   control={form.control}
                   name="eventStartTime"
                   defaultValue={
-                    event ? event.start_at.split("T")[1].slice(0, 5) : ""
+                    event ? event.start_at.split('T')[1].slice(0, 5) : ''
                   }
                   render={({ field }) => (
                     <FormItemField
@@ -145,7 +161,7 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
                   control={form.control}
                   name="eventEndTime"
                   defaultValue={
-                    event ? event.end_at.split("T")[1].slice(0, 5) : ""
+                    event ? event.end_at.split('T')[1].slice(0, 5) : ''
                   }
                   render={({ field }) => (
                     <FormItemField
@@ -154,25 +170,6 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
                       type="time"
                       placeholder="Hora de término"
                       error={form.formState.errors.eventEndTime?.message}
-                    />
-                  )}
-                />
-              </div>
-            </div>
-            <div className="p-4 border rounded-xl space-y-3">
-              <span className="font-bold">Diretrizes</span>
-              <div>
-                <FormField
-                  control={form.control}
-                  name="vacancies"
-                  defaultValue={event ? event.vacancies : 1}
-                  render={({ field }) => (
-                    <FormItemField
-                      field={{ ...field }}
-                      label="Vagas"
-                      error={form.formState.errors.vacancies?.message}
-                      type="number"
-                      placeholder="Quantidade vagas do evento"
                     />
                   )}
                 />
