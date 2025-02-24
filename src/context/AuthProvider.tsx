@@ -36,7 +36,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     return JSON.parse(decodedPayload);
   }, []);
 
-  const isTokenExpired = useCallback(
+  const tokenExpired = useCallback(
     (token: string) => {
       const payload = decodeAndReturnPayload(token);
       if (!payload) return false;
@@ -47,7 +47,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   );
 
   const loadUser = useCallback(
-    (token: string) => {
+    async (token: string) => {
       const payload = decodeAndReturnPayload(token);
       if (!payload) return false;
       const userPayload = userPayloadSchema.parse(payload);
@@ -56,34 +56,36 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     [decodeAndReturnPayload]
   );
 
-  useEffect(() => {
+  const checkAuthentication = useCallback(async () => {
     const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      setIsLoading(false);
+      return;
+    }
 
-    const checkAuthentication = async () => {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-
-        if (accessToken && isLoading) {
-          if (isTokenExpired(accessToken)) {
-            logout();
-          } else if (!token && isAuthenticated != true) {
-            setToken(accessToken);
-            setIsAuthenticated(true);
-          }
-          loadUser(accessToken);
-        }
-      } catch (err) {
-        if (import.meta.env.DEV) {
-          console.error(err);
-        }
-      } finally {
-        setIsLoading(false);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      if (tokenExpired(accessToken)) {
+        logout();
+        return;
       }
-    };
+      setToken(accessToken);
+      setIsAuthenticated(true);
+      await loadUser(accessToken);
+    } catch (err) {
+      if (import.meta.env.DEV) {
+        console.error(err);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [tokenExpired, loadUser, logout]);
 
+  useEffect(() => {
     checkAuthentication();
     if (isLoading) return;
-  }, [isAuthenticated, isLoading, isTokenExpired, loadUser, logout, token]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
 
   useEffect(() => {
     if (isLoading) return;
@@ -117,6 +119,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isAuthenticated,
         setIsAuthenticated,
         isLoading,
+        checkAuthentication,
       }}
     >
       {children}

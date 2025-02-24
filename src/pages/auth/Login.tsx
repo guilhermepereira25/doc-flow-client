@@ -10,7 +10,7 @@ import useAuthError from '@/hooks/useAuthError';
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setToken, setIsAuthenticated } = useAuth();
+  const { checkAuthentication } = useAuth();
   const { setError } = useAuthError();
 
   const form = useForm<AuthFormSchema>({
@@ -27,8 +27,7 @@ export default function Login() {
       return;
     }
     localStorage.setItem('accessToken', accessToken);
-    setToken(accessToken);
-    setIsAuthenticated(true);
+    await checkAuthentication();
     navigate('/events');
   };
 
