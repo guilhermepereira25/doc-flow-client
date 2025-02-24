@@ -39,7 +39,7 @@ export default function Signup() {
 
       <p className="text-sky-900">Já tem uma conta?</p>
       <Button
-        className="w-full bg-sky-900 text-white hover:bg-sky-800"
+        className="w-full bg-sky-900 text-white hover:bg-sky-800 rounded-2xl"
         onClick={() => navigate('/login')}
       >
         Login
