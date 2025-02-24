@@ -36,7 +36,7 @@ import {
 } from "@/api/data/presence.data";
 import { patch } from "@/api/data/events.data";
 import useAuth from "@/hooks/useAuth";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from 'sonner';
 
 interface Pagination {
   pageIndex: number;
@@ -368,9 +368,6 @@ export function ViewEventsDataTable() {
 
   return (
     <div>
-      <div>
-        <Toaster />
-      </div>
       <SearchBar
         placeholder="Pesquisar eventos"
         onChange={(e) => table.setGlobalFilter(e.target.value)}
