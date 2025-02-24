@@ -63,6 +63,7 @@ export interface AuthContextType {
     isAuthenticated: boolean;
     setIsAuthenticated: (isAuthenticated: boolean) => void;
     isLoading: boolean;
+    checkAuthentication: () => Promise<void>;
 }
 
 export const authFormSchema = z.object({
