@@ -104,11 +104,11 @@ export function getColumns(): ColumnDef<Event>[] {
       },
     },
     {
-      accessorKey: 'vagas', 
+      accessorKey: 'vacancies',
       header: 'Vagas',
       cell: ({ row }) => {
-        const vacancies = row.original.vagas;
-        return <span>{vacancies ?? '0'}</span>; 
+        const vacancies = row.original.vacancies;
+        return <span>{vacancies ?? '0'}</span>;
       },
     },
   ];

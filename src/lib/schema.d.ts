@@ -653,7 +653,7 @@ export interface components {
             status: string;
             latitude: number;
             longitude:number;
-            vagas:number;
+            vacancies: number;
         };
         Event: {
             /**
@@ -706,7 +706,7 @@ export interface components {
 
             longitude: number;
 
-            vagas: number;
+            vacancies: number;
 
             user: {
                 id: string,

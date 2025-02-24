@@ -148,7 +148,7 @@ export const createEventSchema = z
         .min(-180, { message: 'Longitude deve ser no mínimo -180' })
         .max(180, { message: 'Longitude deve ser no máximo 180' })
     ),
-    vagas: z.preprocess(
+    vacancies: z.preprocess(
         (a) => Number(a), 
         z
           .number({
@@ -216,7 +216,7 @@ export const createEventSchema = z
       eventEndTime,
       latitude,
       longitude,
-      vagas,
+      vacancies,
     }) => {
       const [startYear, startMonth, startDay] = eventStartDate.split('-').map(Number);
       const [endYear, endMonth, endDay] = eventEndDate.split('-').map(Number);
@@ -233,7 +233,7 @@ export const createEventSchema = z
         eventEndTime,
         latitude,
         longitude,
-        vagas
+        vacancies
       };
     }
   );

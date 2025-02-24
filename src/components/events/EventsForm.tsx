@@ -162,56 +162,56 @@ export default function EventsForm({ form, onSubmit, event }: EventsFormProps) {
             <div className="p-4 border rounded-xl space-y-3">
               <span className="font-bold">Diretrizes</span>
               <div>
-              <FormField
-                control={form.control}
-                name="vagas"
-                defaultValue={event ? event.vagas : 1}
-                render={({ field }) => (
-                  <FormItemField
-                    field={{ ...field}}
-                    label="Vagas"
-                    error={form.formState.errors.vagas?.message}
-                    type="number"
-                    placeholder="Quantidade vagas do evento"
-                  />
-                )}
-              />
-            </div>
+                <FormField
+                  control={form.control}
+                  name="vacancies"
+                  defaultValue={event ? event.vacancies : 1}
+                  render={({ field }) => (
+                    <FormItemField
+                      field={{ ...field }}
+                      label="Vagas"
+                      error={form.formState.errors.vacancies?.message}
+                      type="number"
+                      placeholder="Quantidade vagas do evento"
+                    />
+                  )}
+                />
+              </div>
             </div>
             <div className="p-4 border rounded-xl space-y-3">
               <span className="font-bold">Diretrizes</span>
               <div>
-              <FormField
-                control={form.control}
-                name="latitude"
-                defaultValue={event ? event.latitude : 0}
-                render={({ field }) => (
-                  <FormItemField
-                    field={{ ...field}}
-                    label="Latitude"
-                    error={form.formState.errors.latitude?.message}
-                    type="number"
-                    placeholder="Latitude do evento"
-                  />
-                )}
-              />
-            </div>
-            <div>
-              <FormField
-                control={form.control}
-                name="longitude"
-                defaultValue={event ? event.longitude : 0}
-                render={({ field }) => (
-                  <FormItemField
-                    field={{ ...field}}
-                    label="Longitude"
-                    error={form.formState.errors.longitude?.message}
-                    type="number"
-                    placeholder="Longitude do evento"
-                  />
-                )}
-              />
-            </div>
+                <FormField
+                  control={form.control}
+                  name="latitude"
+                  defaultValue={event ? event.latitude : 0}
+                  render={({ field }) => (
+                    <FormItemField
+                      field={{ ...field }}
+                      label="Latitude"
+                      error={form.formState.errors.latitude?.message}
+                      type="number"
+                      placeholder="Latitude do evento"
+                    />
+                  )}
+                />
+              </div>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="longitude"
+                  defaultValue={event ? event.longitude : 0}
+                  render={({ field }) => (
+                    <FormItemField
+                      field={{ ...field }}
+                      label="Longitude"
+                      error={form.formState.errors.longitude?.message}
+                      type="number"
+                      placeholder="Longitude do evento"
+                    />
+                  )}
+                />
+              </div>
             </div>
           </div>
 

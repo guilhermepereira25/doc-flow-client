@@ -84,43 +84,50 @@ export function ViewEventsDataTable() {
     
     for (const row of newEvents) {
       const eventId = row.original.id;
-      const valVagas = row.original.vagas;
-      console.log("nome vaga: ", row.original.name);
-      
+      const valVacancies = row.original.vacancies;
+      console.log('nome vaga: ', row.original.name);
+
       const payload: PresenceCreate = {
         event_id: eventId,
-        status: "registered",
-        check_out_date: "",
-        check_in_date: "", 
+        status: 'registered',
+        check_out_date: '',
+        check_in_date: '',
       };
-      
+
       try {
-        if(valVagas > 0)
-        {
+        if (valVacancies > 0) {
           const result = await createPresence(payload);
-          if(result)
-          {
-            toast.success(`Inscrições realizadas com sucesso! Agora você pode realizar check-ins no evento  ${row.original.name}.`);
-            if(valVagas > 0)
-              patch(eventId, {name: row.original.name, eventStartDate: row.original.start_at, eventEndDate: row.original.end_at, status: row.original.status,   latitude: row.original.latitude, longitude: row.original.longitude, vagas: (row.original.vagas-1)});
-            toast.success(`Número de vagas no evento ${row.original.name}: ${row.original.vagas-1}`);
-          }
-          else
-          {
+          if (result) {
+            toast.success(
+              `Inscrições realizadas com sucesso! Agora você pode realizar check-ins no evento  ${row.original.name}.`
+            );
+            if (valVacancies > 0)
+              patch(eventId, {
+                name: row.original.name,
+                eventStartDate: row.original.start_at,
+                eventEndDate: row.original.end_at,
+                status: row.original.status,
+                latitude: row.original.latitude,
+                longitude: row.original.longitude,
+                vacancies: row.original.vacancies - 1,
+              });
+            toast.success(
+              `Número de vacancies no evento ${row.original.name}: ${
+                row.original.vacancies - 1
+              }`
+            );
+          } else {
             toast.error(`Erro ao inscrever no evento ${row.original.name}`);
           }
-          
+        } else {
+          toast.error(`vacancies encerradas no evento ${row.original.name}`);
         }
-        else
-        {
-          toast.error(`Vagas encerradas no evento ${row.original.name}`);
-        }
-        
-        
       } catch (error) {
-        console.error(`Erro ao criar presença para o evento ${eventId}:`, error);
+        console.error(
+          `Erro ao criar presença para o evento ${eventId}:`,
+          error
+        );
         toast.error(`Erro ao inscrever no evento ${eventId}`);
-        
       }
     }
     

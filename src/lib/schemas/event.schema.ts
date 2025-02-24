@@ -21,6 +21,9 @@ export const createEventSchema = z
         status: z.string(),
         eventStartTime: z.string().regex(/\d{1,2}:\d{1,2}/),
         eventEndTime: z.string().regex(/\d{1,2}:\d{1,2}/),
+        latitude: z.number().min(-90).max(90),
+        longitude: z.number().min(-180).max(180),
+        vacancies: z.number().min(1),
     }).superRefine((val, ctx) => {
         const now = new Date().toISOString();
 
@@ -79,6 +82,9 @@ export const createEventSchema = z
             eventEndDate,
             eventStartTime,
             eventEndTime,
+            latitude,
+            longitude,
+            vacancies,
         }) => {
             const [startYear, startMonth, startDay] = eventStartDate.split('-').map(Number);
             const [endYear, endMonth, endDay] = eventEndDate.split('-').map(Number);
@@ -93,6 +99,9 @@ export const createEventSchema = z
                 eventEndDate: end.toISOString(),
                 eventStartTime,
                 eventEndTime,
+                latitude,
+                longitude,
+                vacancies,
             };
         }
     );
