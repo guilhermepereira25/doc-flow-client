@@ -21,7 +21,6 @@ export const getUser = async (id: string): Promise<User | undefined> => {
   try {
     const userService = new UsersService();
     const response = await userService.getOne(id);
-    console.log(response.data.user);
     return response.data.user;
   } catch (error) {
     console.error(error);
