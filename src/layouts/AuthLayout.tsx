@@ -40,7 +40,7 @@ export default function AuthLayout() {
   }, [error]);
 
   return (
-    <div className="h-screen grid grid-cols-1 md:grid-cols-2">
+    <div className="h-fit grid grid-cols-1 md:grid-cols-2">
       <div className="flex flex-col min-h-screen items-center justify-center bg-white p-4">
         <div className="logo">
           <img
