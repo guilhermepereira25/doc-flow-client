@@ -54,7 +54,6 @@ export const getUserEvents = async (data: {
 
 export const getEvent = async (id: string): Promise<Event | undefined> => {
   try {
-    console.log("chamando evento");
     const eventService = new EventService();
     const response = await eventService.getOne(id);
     if (response.success) {
