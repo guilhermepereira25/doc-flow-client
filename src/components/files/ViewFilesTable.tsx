@@ -14,7 +14,7 @@ import { useEffect, useMemo, useState } from "react";
 import SearchBar from "../SearchBar";
 import DataTable from "../DataTable";
 import { getColumns } from "./ViewFileTableColumns";
-import { File } from "@/lib/schemas/file";
+import { File } from "@/lib/schemas/file.schema";
 import { getFilesByUser } from "@/api/data/file.data";
 import { Pagination as PaginationArgs } from "@/lib/types";
 import {
@@ -109,18 +109,18 @@ export function ViewFilesTable() {
             variant="outline"
             size="sm"
             className={`border rounded-xl ${
-              sorting.length === 0 && "bg-neutral-300"
+              sorting.length === 0 && 'bg-neutral-300'
             }`}
-            onClick={() => handleSorting("")}
+            onClick={() => handleSorting('')}
           >
             Todos
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleSorting("creator")}
+            onClick={() => handleSorting('creator')}
             className={`border rounded-xl ${
-              table.getColumn("user")?.getIsSorted() && "bg-neutral-300"
+              table.getColumn('user')?.getIsSorted() && 'bg-neutral-300'
             }`}
           >
             Responsável
@@ -128,9 +128,9 @@ export function ViewFilesTable() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleSorting("time")}
+            onClick={() => handleSorting('time')}
             className={`border rounded-xl ${
-              table.getColumn("created_at")?.getIsSorted() && "bg-neutral-300"
+              table.getColumn('created_at')?.getIsSorted() && 'bg-neutral-300'
             }`}
           >
             Por tempo de criação
@@ -139,10 +139,10 @@ export function ViewFilesTable() {
 
         <div>
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger asChild>
               <Button
-                variant={"outline"}
-                size={"lg"}
+                variant={'outline'}
+                size={'lg'}
                 className="rounded-2xl bg-neutral-100 text-sky-700"
               >
                 <Filter />
