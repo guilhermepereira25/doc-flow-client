@@ -781,15 +781,17 @@ export interface components {
       /** @description Error */
       error: Record<string, never>;
       data: {
-        file?: {
-          id?: string;
-          name?: string;
-          user_id?: string;
-          event_id?: string;
+        file: {
+          id: string;
+          name: string;
+          user_id: string;
+          event_id: string;
           /** @enum {unknown} */
-          type?: "image" | "document" | "certificate";
+          type: "image" | "document" | "certificate";
           /** @enum {unknown} */
-          status?: "waiting" | "processing" | "done" | "error";
+          status: "waiting" | "processing" | "done" | "error";
+          path: string | null;
+          created_at: string;
         };
         message?: string;
       };
@@ -1150,7 +1152,7 @@ export interface components {
       /** @example file.txt */
       name: string;
       /** @example https://www.example.com/file.txt */
-      path: string;
+      path: string | null;
       /** @example image */
       type: string;
       /** @example 550e8400-e29b-41d4-a716-446655440000 */
