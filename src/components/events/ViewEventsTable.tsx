@@ -36,7 +36,7 @@ import {
 } from "@/api/data/presence.data";
 import { patch } from "@/api/data/events.data";
 import useAuth from "@/hooks/useAuth";
-import { toast } from 'sonner';
+import { toast } from "sonner";
 
 interface Pagination {
   pageIndex: number;
