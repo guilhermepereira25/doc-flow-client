@@ -100,7 +100,7 @@ export function ViewFilesTable() {
   return (
     <div className="space-y-4">
       <SearchBar
-        placeholder="Pesquisar eventos"
+        placeholder="Pesquisar arquivos"
         onChange={(e) => table.setGlobalFilter(e.target.value)}
       />
       <div className="flex flex-row justify-between items-center w-full space-y-4">
