@@ -15,6 +15,7 @@ import File from "@/pages/files/File";
 import ProfileRoute from "@/components/ProfileRoute";
 import ChangePassword from "@/pages/user/ChangePassword";
 import Forbidden from "@/pages/Forbidden";
+import FileCreate from '@/pages/files/FileCreate';
 
 export default function Router() {
   return (
@@ -28,7 +29,7 @@ export default function Router() {
             <Route path="events">
               <Route path="all" element={<EventsView />} />
               <Route
-                element={<ProfileRoute profile={["Admin", "Professor"]} />}
+                element={<ProfileRoute profile={['Admin', 'Professor']} />}
               >
                 <Route index element={<EventsUserView />} />
                 <Route path="create" element={<EventsCreate />} />
@@ -38,6 +39,11 @@ export default function Router() {
 
             <Route path="files">
               <Route index element={<File />} />
+              <Route
+                element={<ProfileRoute profile={['Admin', 'Professor']} />}
+              >
+                <Route path="create" element={<FileCreate />} />
+              </Route>
             </Route>
 
             <Route path="profile" element={<Profile />} />
