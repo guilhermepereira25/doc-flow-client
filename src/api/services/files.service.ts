@@ -23,7 +23,11 @@ export default class FileService extends AbstractService {
     return await this.api.post(this.basePath, data);
   }
 
-  async upload(fileId: string, fileData: FormData, onUploadProgress: (progressEvent: AxiosProgressEvent) => void) {
+  async upload(
+    fileId: string,
+    fileData: FormData,
+    onUploadProgress: (progressEvent: AxiosProgressEvent) => void,
+  ) {
     return await this.api.post(this.basePath + `/upload/${fileId}`, fileData, {
       headers: {
         "Content-Type": "multipart/form-data",

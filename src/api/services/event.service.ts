@@ -51,4 +51,8 @@ export default class AuthService extends AbstractService {
   > {
     return await this.api.patch(this.basePath + `/${id}`, data);
   }
+
+  async search(q: string): Promise<GetAllEventsResponseDto> {
+    return await this.api.get(this.basePath + `/search?q=${q}`);
+  }
 }

@@ -19,7 +19,9 @@ export async function getFilesByUser(args: {
   }
 }
 
-export const create = async (file: CreateFile): Promise<FileSchema | undefined> => {
+export const create = async (
+  file: CreateFile,
+): Promise<FileSchema | undefined> => {
   try {
     const res = await fileService.create(file);
     return res.data?.file;
@@ -30,7 +32,11 @@ export const create = async (file: CreateFile): Promise<FileSchema | undefined> 
   }
 };
 
-export const upload = async (fileId: string, fileData: FormData, onUploadProgress: (progressEvent: AxiosProgressEvent) => void): Promise<ApiResponse<{ message: string | null }> | undefined> => {
+export const upload = async (
+  fileId: string,
+  fileData: FormData,
+  onUploadProgress: (progressEvent: AxiosProgressEvent) => void,
+): Promise<ApiResponse<{ message: string | null }> | undefined> => {
   try {
     const res = await fileService.upload(fileId, fileData, onUploadProgress);
     return res.data;
@@ -45,4 +51,4 @@ export const upload = async (fileId: string, fileData: FormData, onUploadProgres
       }
     }
   }
-}
+};

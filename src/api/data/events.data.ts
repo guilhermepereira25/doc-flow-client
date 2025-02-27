@@ -82,3 +82,16 @@ export const patch = async (
     return undefined;
   }
 };
+
+export const search = async (query: string) => {
+  try {
+    const eventService = new EventService();
+    const response = await eventService.search(query);
+    return response.data.events;
+  } catch (err) {
+    if (import.meta.env.DEV) {
+      console.error(err);
+    }
+    return [];
+  }
+};

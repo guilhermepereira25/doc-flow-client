@@ -28,7 +28,10 @@ export const getUser = async (id: string): Promise<User | undefined> => {
   }
 };
 
-export const updateUserPatchVerb = async (id: string, data: CreateUser): Promise<User | undefined> => {
+export const updateUserPatchVerb = async (
+  id: string,
+  data: CreateUser,
+): Promise<User | undefined> => {
   try {
     const response = await userService.patch(id, data);
     return response.data.user;
@@ -36,4 +39,4 @@ export const updateUserPatchVerb = async (id: string, data: CreateUser): Promise
     if (import.meta.env.DEV) console.error(err);
     return undefined;
   }
-}
+};
