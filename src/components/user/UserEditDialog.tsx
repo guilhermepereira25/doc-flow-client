@@ -28,11 +28,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import useProfile from '@/hooks/useProfile';
 import { updateUserPatchVerb } from '@/api/data/users.data';
 import useUser from '@/hooks/useUser';
+import { LoaderCircle } from 'lucide-react';
 
 export default function UserEditDialog() {
   const [profiles, setProfiles] = useState<ProfileSchema[]>([]);
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
   const { isUserProfileAdminOrProfessor } = useProfile();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const form = useForm<CreateUser>({
     resolver: zodResolver(createUserSchema),
@@ -65,12 +67,15 @@ export default function UserEditDialog() {
   }, [form, user]);
 
   const handleSubmit = async (data: CreateUser) => {
+    setIsSubmitting(true);
     if (!user) return;
     const updatedUser = await updateUserPatchVerb(user.id, data);
     if (updatedUser) {
       toast.success('Usuário atualizado com sucesso');
+      setIsSubmitting(false);
       return;
     }
+    setIsSubmitting(false);
     toast.error('Erro ao atualizar usuário');
   };
 
@@ -93,7 +98,11 @@ export default function UserEditDialog() {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form id="user-edit" onSubmit={form.handleSubmit(handleSubmit)}>
+          <form
+            id="user-edit"
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className={cn(isLoading && 'opacity-50')}
+          >
             <div className="grid gap-4 py-4">
               <FormField
                 control={form.control}
@@ -212,8 +221,16 @@ export default function UserEditDialog() {
                 type="submit"
                 className="bg-sky-900 rounded-2xl text-white"
                 form="user-edit"
+                disabled={isLoading || isSubmitting}
               >
-                Salvar alterações
+                {isSubmitting ? (
+                  <>
+                    <LoaderCircle className="w-6 h-6 animate-spin" />
+                    Salvando...
+                  </>
+                ) : (
+                  'Salvar alterações'
+                )}
               </Button>
             </DialogFooter>
           </form>
