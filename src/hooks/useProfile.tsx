@@ -8,7 +8,7 @@ const useProfile = (): {
 } => {
   const { user } = useAuth();
   if (!user) {
-    throw new Error('useProfile must be used within a AuthProvider');
+    throw new Error("useProfile must be used within a AuthProvider");
   }
 
   const profileName =
