@@ -6,7 +6,7 @@ import { getEvent } from "@/api/data/events.data";
 import { useState, useEffect } from "react";
 import { Event } from "@/lib/types";
 import { pdf } from "@react-pdf/renderer";
-import CertificatePDF from './PresenceReportPdfForm';
+import CertificatePDF from "./PresenceReportPdfForm";
 import { saveAs } from "file-saver";
 import useAuth from "@/hooks/useAuth";
 

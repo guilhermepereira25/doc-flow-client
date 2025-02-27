@@ -5,46 +5,46 @@ import {
   View,
   Image,
   StyleSheet,
-} from '@react-pdf/renderer';
+} from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
   page: {
-    flexDirection: 'column',
+    flexDirection: "column",
     padding: 0,
-    position: 'relative',
+    position: "relative",
   },
   headerImage: {
-    width: '100%',
+    width: "100%",
     height: 150,
   },
   contentContainer: {
     paddingHorizontal: 20,
     paddingVertical: 0,
-    alignItems: 'center',
-    textAlign: 'center',
+    alignItems: "center",
+    textAlign: "center",
     marginTop: 20,
     marginBottom: 80,
   },
   textContainer: {
     marginVertical: 0,
-    width: '80%',
+    width: "80%",
   },
   text: {
     fontSize: 14,
     lineHeight: 1.5,
   },
   dateContainer: {
-    width: '100%',
+    width: "100%",
     marginTop: 40,
   },
   dateText: {
-    textAlign: 'right',
+    textAlign: "right",
     fontSize: 14,
     marginRight: 20,
   },
   signatures: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     marginTop: 20,
   },
   signatureImage: {
@@ -53,9 +53,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   footerImage: {
-    width: '100%',
+    width: "100%",
     height: 100,
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
   },
@@ -74,10 +74,10 @@ export const CertificatePDF = ({
   dataInicio: string;
   dataFim: string;
 }) => {
-  const formattedCurrentDate = new Intl.DateTimeFormat('pt-BR', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
+  const formattedCurrentDate = new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
   }).format(new Date());
 
   return (
@@ -86,7 +86,7 @@ export const CertificatePDF = ({
         <Image style={styles.headerImage} src="/images/header_sepex.png" />
         <View style={styles.contentContainer}>
           <View style={styles.textContainer}>
-            <Text style={[styles.text, { textAlign: 'justify' }]}>
+            <Text style={[styles.text, { textAlign: "justify" }]}>
               O Centro Federal de Educação Tecnológica Celso Suckow da Fonseca
               certifica que {nome} apresentou a Atividade {atividade}, com
               duração de {horas} horas, durante a realização da Semana de

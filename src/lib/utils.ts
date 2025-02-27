@@ -25,7 +25,13 @@ export function getEventsStatusText(status: string): string {
   return statusAsString;
 }
 
-export const menuRoutes = ["/events", "/events/all", "/profile", "/files", "/files/create"];
+export const menuRoutes = [
+  "/events",
+  "/events/all",
+  "/profile",
+  "/files",
+  "/files/create",
+];
 
 export const superUsersProfiles = Object.keys(Profile).filter(
   (profile) => profile !== Profile.Student && profile !== Profile.User,
