@@ -66,7 +66,7 @@ export default function EventsCreate() {
           sed earum doloremque quam error asperiores unde blanditiis.
         </span>
       </div>
-      <div className="ml-6 mr-6 max-w-full p-6 border rounded-xl">
+      <div className="ml-6 mr-6 max-w-full p-6 border rounded-xl mb-4">
         {error && (
           <Alert variant="destructive" className="w-1/2">
             <AlertCircle className="h-4 w-4" />
