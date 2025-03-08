@@ -1,7 +1,12 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { File } from "@/lib/schemas/file.schema";
+import ActionsTableColumn from "./ActionsTableColumn";
 
-export function getColumns(): ColumnDef<File>[] {
+interface getColumnsProps {
+  onDelete: () => void;
+}
+
+export function getColumns({ onDelete }: getColumnsProps): ColumnDef<File>[] {
   return [
     {
       accessorKey: "name",
@@ -51,6 +56,14 @@ export function getColumns(): ColumnDef<File>[] {
         );
       },
       enableHiding: true,
+    },
+    {
+      accessorKey: "id",
+      header: "Ações",
+      cell: ({ row }) => {
+        const fileId = row.original.id;
+        return <ActionsTableColumn fileId={fileId} onDelete={onDelete} />;
+      },
     },
   ];
 }
