@@ -1,15 +1,16 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { useState, ReactNode, useEffect, useCallback } from 'react';
-import { createContext } from 'react';
+import React, { useState, ReactNode, useEffect, useCallback } from "react";
+import { createContext } from "react";
 import {
   UserPayload,
   userPayloadSchema,
   type AuthContextType,
-} from '@/lib/types';
-import { useLocation, useNavigate } from 'react-router';
+} from "@/lib/types";
+import { useLocation, useNavigate } from "react-router";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
@@ -25,77 +26,88 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const logout = useCallback(() => {
     localStorage.clear();
     setIsAuthenticated(false);
-    navigate('/login', { replace: true });
+    navigate("/login", { replace: true });
   }, [navigate]);
 
   const decodeAndReturnPayload = useCallback((token: string) => {
-    const payload = token.split('.')[1];
+    const payload = token.split(".")[1];
     //see: https://stackoverflow.com/questions/68849233/convert-a-string-to-base64-in-javascript-btoa-and-atob-are-deprecated
     const decodedPayload = atob(payload);
     return JSON.parse(decodedPayload);
   }, []);
 
-  const isTokenExpired = useCallback(
+  const tokenExpired = useCallback(
     (token: string) => {
       const payload = decodeAndReturnPayload(token);
       if (!payload) return false;
       const expirateDate = payload.exp * 1000;
       return expirateDate < Date.now();
     },
-    [decodeAndReturnPayload]
+    [decodeAndReturnPayload],
   );
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    const checkAuthentication = async () => {
-      if (accessToken && isLoading) {
-        if (isTokenExpired(accessToken)) {
-          setIsAuthenticated(false);
-          logout();
-        } else if (!token && isAuthenticated != true) {
-          setToken(accessToken);
-          setIsAuthenticated(true);
-        }
-      }
-      setIsLoading(false);
-    };
+  const loadUser = useCallback(
+    async (token: string) => {
+      const payload = decodeAndReturnPayload(token);
+      if (!payload) return false;
+      const userPayload = userPayloadSchema.parse(payload);
+      setUser(userPayload);
+    },
+    [decodeAndReturnPayload],
+  );
 
+  const checkAuthentication = useCallback(async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      if (tokenExpired(accessToken)) {
+        logout();
+        return;
+      }
+      setToken(accessToken);
+      setIsAuthenticated(true);
+      await loadUser(accessToken);
+    } catch (err) {
+      if (import.meta.env.DEV) {
+        console.error(err);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [tokenExpired, loadUser, logout]);
+
+  useEffect(() => {
     checkAuthentication();
     if (isLoading) return;
-  }, [isAuthenticated, isLoading, isTokenExpired, logout, token]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
 
   useEffect(() => {
     if (isLoading) return;
     if (
       isAuthenticated &&
-      (location.pathname === '/login' || location.pathname === '/signup')
+      (location.pathname === "/login" || location.pathname === "/signup")
     ) {
-      const navigateFromTo = location.state?.from?.pathname || '/';
-      navigate(navigateFromTo, { state: { from: 'refresh' } });
+      const navigateFromTo = location.state?.from?.pathname || "/";
+      navigate(navigateFromTo, { state: { from: "refresh" } });
     }
 
     if (!isAuthenticated) {
-      if (location.pathname === '/login' || location.pathname === '/signup') {
+      if (location.pathname === "/login" || location.pathname === "/signup") {
         return;
       }
-      navigate('/login', { replace: true });
+      navigate("/login", { replace: true });
     }
   }, [isAuthenticated, location, navigate, isLoading]);
 
-  useEffect(() => {
-    if (isLoading || !token) {
-      return;
-    }
-    const payload = decodeAndReturnPayload(token);
-    if (!payload) {
-      return;
-    }
-    if (user != null) {
-      return;
-    }
-    const userPayload: UserPayload = userPayloadSchema.parse(payload);
-    setUser(userPayload);
-  }, [token, decodeAndReturnPayload, isLoading, user]);
+  if (isLoading) {
+    return <LoadingOverlay />;
+  }
 
   return (
     <AuthContext.Provider
@@ -107,6 +119,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isAuthenticated,
         setIsAuthenticated,
         isLoading,
+        checkAuthentication,
       }}
     >
       {children}

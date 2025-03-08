@@ -1,28 +1,68 @@
-import AuthService from '../services/auth.service';
-import type { paths, components } from '@/lib/schema';
+import { ChangePasswordDto } from "@/lib/schemas/auth/change-password.schema";
+import AuthService from "../services/auth.service";
+import {
+  AuthSigninResponse,
+  AuthSignupResponse,
+  AuthSigninBody,
+  AuthSignupBody,
+} from "@/lib/schemas/auth/index.schema";
 
-type AuthSigninResponse = components['schemas']['AccessTokenResponseDto'];
-type AuthSignupResponse = components['schemas']['AccessTokenResponseDto'];
+const authServiceInstance = new AuthService();
 
-type AuthSigninBody = paths['/auth/signin']['post']['requestBody']['content']['application/json'];
-type AuthSignupBody = paths['/auth/signup']['post']['requestBody']['content']['application/json'];
-
-export const getAccessToken = async ({ email, password }: AuthSigninBody): Promise<string | undefined> => {
+export const getAccessToken = async ({
+  email,
+  password,
+}: AuthSigninBody): Promise<string | undefined> => {
   try {
-    const authServiceInstance = new AuthService();
-    const data: AuthSigninResponse = await authServiceInstance.singin(email, password);
+    const data: AuthSigninResponse = await authServiceInstance.singin(
+      email,
+      password,
+    );
     return data.access_token;
   } catch (error) {
     console.error(error);
   }
 };
 
-export const signup = async ({ email, password, enrollment, fullName }: AuthSignupBody): Promise<string | undefined> => {
+export const signup = async ({
+  email,
+  password,
+  enrollment,
+  fullName,
+  profileId,
+}: AuthSignupBody): Promise<string | undefined> => {
   try {
+    if (!enrollment || !fullName || !profileId) {
+      throw new Error("Campos vazios não são permitidos");
+    }
+    console.log(email, password, enrollment, fullName, profileId);
     const authServiceInstance = new AuthService();
-    const data: AuthSignupResponse = await authServiceInstance.signup(email, password, enrollment, fullName);
+    const data: AuthSignupResponse = await authServiceInstance.signup(
+      email,
+      password,
+      enrollment,
+      fullName,
+      profileId,
+    );
     return data.access_token;
   } catch (err) {
     console.error(err);
+  }
+};
+
+export const changePassword = async ({
+  oldPassword,
+  newPassword,
+}: ChangePasswordDto): Promise<void | string> => {
+  try {
+    return await authServiceInstance.changePassword({
+      oldPassword,
+      newPassword,
+    });
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      console.error(error);
+    }
+    return "Ocorreu um erro ao tentar alterar a senha";
   }
 };

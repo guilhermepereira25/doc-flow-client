@@ -1,7 +1,7 @@
-import { DropdownMenuItem } from './ui/dropdown-menu';
-import EllipsisDropdown from './EllipsisDropdown';
-import { Edit } from 'lucide-react';
-import { Link } from 'react-router';
+import { DropdownMenuItem } from "./ui/dropdown-menu";
+import EllipsisDropdown from "./EllipsisDropdown";
+import { Edit } from "lucide-react";
+import { Link } from "react-router";
 
 export default function EventsEllipsisDropdown({
   ...props

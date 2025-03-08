@@ -43,6 +43,21 @@
   }
 }
 
+@keyframes loading {
+
+  0%,
+  100% {
+    width: 0%;
+  }
+
+  50% {
+    width: 100%;
+  }
+}
+
+.animate-loading {
+  animation: loading 5s infinite;
+}
 .animate-fade-in-out {
   animation: fade-in-out 5s infinite;
 }

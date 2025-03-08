@@ -1,12 +1,12 @@
-import PageHeader from '@/components/PageHeader';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { createEvent } from '@/api/data/events.data';
-import { useEffect, useState } from 'react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
-import EventsForm from '@/components/events/EventsForm';
-import { EventCreate, EventCreateSchema, createEventSchema } from '@/lib/types';
+import PageHeader from "@/components/PageHeader";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createEvent } from "@/api/data/events.data";
+import { useEffect, useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import EventsForm from "@/components/events/EventsForm";
+import { EventCreate, EventCreateSchema, createEventSchema } from "@/lib/types";
 
 export default function EventsCreate() {
   const [error, setError] = useState<string | null>(null);
@@ -15,22 +15,24 @@ export default function EventsCreate() {
   const form = useForm<EventCreateSchema>({
     resolver: zodResolver(createEventSchema),
     defaultValues: {
-      name: '',
-      status: 'upcoming',
-      eventStartDate: '',
-      eventEndDate: '',
+      name: "",
+      status: "upcoming",
+      eventStartDate: "",
+      eventEndDate: "",
+      latitude: 0,
+      longitude: 0,
     },
   });
 
   const onSubmit: SubmitHandler<EventCreateSchema> = async (
-    data: EventCreate
+    data: EventCreate,
   ) => {
     const result = await createEvent({ ...data });
     if (!result) {
-      setError('Ocorre um erro ao criar um evento, tente novamente');
+      setError("Ocorre um erro ao criar um evento, tente novamente");
       return;
     }
-    setSuccess('Evento criado com sucesso');
+    setSuccess("Evento criado com sucesso");
   };
 
   useEffect(() => {
@@ -64,7 +66,7 @@ export default function EventsCreate() {
           sed earum doloremque quam error asperiores unde blanditiis.
         </span>
       </div>
-      <div className="ml-6 mr-6 max-w-full p-6 border rounded-xl">
+      <div className="ml-6 mr-6 max-w-full p-6 border rounded-xl mb-4">
         {error && (
           <Alert variant="destructive" className="w-1/2">
             <AlertCircle className="h-4 w-4" />

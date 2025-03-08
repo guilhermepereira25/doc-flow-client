@@ -1,4 +1,4 @@
-import { SidebarMenuButton, SidebarMenuItem } from './ui/sidebar';
+import { SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
 
 interface NavMenuItemProps {
   text: string;
@@ -12,8 +12,8 @@ export default function NavMenuItem({ ...props }: NavMenuItemProps) {
       <SidebarMenuButton
         className={`${
           props.activeNavItem
-            ? 'bg-sky-900 text-white border rounded-xl min-h-10  hover:bg-sky-800'
-            : 'text-muted'
+            ? "bg-sky-900 text-white border rounded-xl min-h-10  hover:bg-sky-800"
+            : "text-muted"
         } p-4 mb-4`}
         type="button"
         onClick={props.onClick}

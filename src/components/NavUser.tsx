@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@/components/ui/sidebar';
+} from "@/components/ui/sidebar";
 
 export function NavUser({
   user,
@@ -25,9 +25,9 @@ export function NavUser({
               <AvatarImage src={user.avatar} alt={user.name} />
               <AvatarFallback className="rounded-lg">
                 {user.name
-                  .split(' ')
+                  .split(" ")
                   .map((n) => n[0])
-                  .join('')}
+                  .join("")}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col ml-2">

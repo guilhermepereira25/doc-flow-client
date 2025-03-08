@@ -1,16 +1,16 @@
-import PageHeader from '@/components/PageHeader';
-import { components } from '@/lib/schema';
-import { useCallback, useEffect, useState } from 'react';
-import { getUserEvents } from '@/api/data/events.data';
-import useAuth from '@/hooks/useAuth';
-import ViewUserEventsBox from '@/components/events/ViewUserEventsBox';
-import { Button } from '@/components/ui/button';
-import { Link, useLocation } from 'react-router';
-import SearchBar from '@/components/SearchBar';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
+import PageHeader from "@/components/PageHeader";
+import { components } from "@/lib/schema";
+import { useCallback, useEffect, useState } from "react";
+import { getUserEvents } from "@/api/data/events.data";
+import useAuth from "@/hooks/useAuth";
+import ViewUserEventsBox from "@/components/events/ViewUserEventsBox";
+import { Button } from "@/components/ui/button";
+import { Link, useLocation } from "react-router";
+import SearchBar from "@/components/SearchBar";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
-type Event = components['schemas']['Event'];
+type Event = components["schemas"]["Event"];
 
 export default function EventsUserView() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -40,7 +40,7 @@ export default function EventsUserView() {
 
   const handleEventsOnGoing = useCallback(async () => {
     const eventsOnGoing = events.filter((event) => {
-      return event.status === 'started';
+      return event.status === "started";
     });
     setEventsOnGoing(eventsOnGoing);
   }, [events]);
@@ -88,7 +88,7 @@ export default function EventsUserView() {
         description={`${eventsOnGoing.length} eventos em andamento`}
       />
       <div className="container max-w-full space-y-4 p-6">
-        {location?.state?.action === 'update' && (
+        {location?.state?.action === "update" && (
           <Alert className="bg-slate-300 rounded-2xl animate-bounce">
             <AlertCircle className="w-6 h-6 text-neutral-600" />
             <AlertTitle className="text-slate-900 ml-2">
