@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-table";
 
 import { Button } from "../ui/button";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import SearchBar from "../SearchBar";
 import DataTable from "../DataTable";
 import { getColumns } from "./ViewFileTableColumns";
@@ -48,6 +48,13 @@ export function ViewFilesTable() {
     setData(files);
   };
 
+  const onDelete = useCallback(() => {
+    fetchEvents({
+      limit: pagination.pageSize,
+      offset: pagination.pageIndex * pagination.pageSize,
+    });
+  }, [pagination]);
+
   useEffect(() => {
     fetchEvents({
       limit: pagination.pageSize,
@@ -55,7 +62,7 @@ export function ViewFilesTable() {
     });
   }, [pagination, pagination.pageIndex, pagination.pageSize]);
 
-  const columns = useMemo(() => getColumns(), []);
+  const columns = useMemo(() => getColumns({ onDelete }), [onDelete]);
 
   const table = useReactTable({
     data,
@@ -88,7 +95,7 @@ export function ViewFilesTable() {
         table
           .getColumn("created_at")
           ?.toggleSorting(
-            table.getColumn("created_at")?.getIsSorted() === "asc",
+            table.getColumn("created_at")?.getIsSorted() === "asc"
           );
         break;
       default:
@@ -109,18 +116,18 @@ export function ViewFilesTable() {
             variant="outline"
             size="sm"
             className={`border rounded-xl ${
-              sorting.length === 0 && 'bg-neutral-300'
+              sorting.length === 0 && "bg-neutral-300"
             }`}
-            onClick={() => handleSorting('')}
+            onClick={() => handleSorting("")}
           >
             Todos
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleSorting('creator')}
+            onClick={() => handleSorting("creator")}
             className={`border rounded-xl ${
-              table.getColumn('user')?.getIsSorted() && 'bg-neutral-300'
+              table.getColumn("user")?.getIsSorted() && "bg-neutral-300"
             }`}
           >
             Responsável
@@ -128,9 +135,9 @@ export function ViewFilesTable() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleSorting('time')}
+            onClick={() => handleSorting("time")}
             className={`border rounded-xl ${
-              table.getColumn('created_at')?.getIsSorted() && 'bg-neutral-300'
+              table.getColumn("created_at")?.getIsSorted() && "bg-neutral-300"
             }`}
           >
             Por tempo de criação
@@ -141,8 +148,8 @@ export function ViewFilesTable() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                variant={'outline'}
-                size={'lg'}
+                variant={"outline"}
+                size={"lg"}
                 className="rounded-2xl bg-neutral-100 text-sky-700"
               >
                 <Filter />
