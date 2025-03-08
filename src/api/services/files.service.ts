@@ -1,7 +1,8 @@
 import { components } from "@/lib/schema";
 import AbstractService from "./abstract.service";
 import { CreateFile, CreateFileResponse } from "@/lib/schemas/file.schema";
-import { AxiosProgressEvent } from "axios";
+import { AxiosProgressEvent, AxiosResponse } from "axios";
+import { privateAxiosInstance } from "../axios-instance";
 
 type GetAllFilesResponseDto = components["schemas"]["GetAllFilesResponseDto"];
 
@@ -34,5 +35,15 @@ export default class FileService extends AbstractService {
       },
       onUploadProgress,
     });
+  }
+
+  async download(fileId: string): Promise<AxiosResponse<Blob>> {
+    return await privateAxiosInstance.get(this.basePath + `/download/${fileId}`, {
+      responseType: "blob",
+    });
+  }
+
+  async remove(fileId: string) {
+    return await this.api.delete(this.basePath + `/${fileId}`);
   }
 }
